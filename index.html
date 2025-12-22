@@ -103,12 +103,22 @@
         </div>
         <div class="flex justify-between items-end relative z-10">
             <div>
-                <p class="text-teal-100 text-sm font-medium mb-1 drop-shadow-md">Dec 24 - Jan 3</p>
+                <p class="text-teal-100 text-sm font-medium mb-1 drop-shadow-md">24-12-2025 - 03-01-2026</p>
                 <h1 class="text-3xl font-bold drop-shadow-md">Stuti's 2025 Year-End Trip</h1>
             </div>
             <div class="text-right">
-                <div id="sl-time" class="text-2xl font-bold font-mono drop-shadow-md">--:--</div>
-                <p class="text-xs text-teal-100 drop-shadow-md">Colombo Time</p>
+                <!-- Time Box (Liquid Glass Style) -->
+                <div class="bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl rounded-3xl border border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] flex flex-col items-center justify-center w-28 h-28 relative overflow-hidden">
+                    <!-- Subtle shine effect -->
+                    <div class="absolute -top-6 -left-6 w-16 h-16 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+                    
+                    <!-- 24 Hour Clock -->
+                    <div id="sl-time" class="text-3xl font-bold drop-shadow-sm leading-none mb-1 tracking-tight relative z-10">--:--</div>
+                    <!-- 12 Hour Clock -->
+                    <div id="sl-time-12" class="text-xs font-medium text-teal-50 mb-2 relative z-10">--:--</div>
+                    <!-- Label -->
+                    <p class="text-[9px] text-teal-50 uppercase tracking-widest font-medium border-t border-white/20 pt-1 w-full text-center relative z-10">Colombo</p>
+                </div>
             </div>
         </div>
     </header>
@@ -468,34 +478,33 @@
         let currentEditIndex = -1;
 
         const defaultItinerary = [
-            { date: "2024-12-24", title: "Delhi to Hyderabad", loc: "Sneha's Place", icon: "fa-plane-departure", details: "Flight: Indigo (2 PM). Stay at Sneha." },
-            { date: "2024-12-25", title: "Fly to Colombo", loc: "Murphy’s Villa", icon: "fa-plane", details: "HYD to CMB (8:45 AM - 10:45 AM). Relax and check-in." },
-            { date: "2024-12-26", title: "Travel to Sigiriya", loc: "Boutique Hotel", icon: "fa-bus", details: "Travel by Bus. Explore Sigiriya Fortress (Lion Rock)." },
-            { date: "2024-12-27", title: "Sigiriya to Kandy", loc: "Hill Crest Greens", icon: "fa-city", details: "Travel to Kandy. Roam around the city, visit Temple of Tooth." },
-            { date: "2024-12-28", title: "Train to Nuwara Eliya", loc: "Ella Guest House", icon: "fa-train", details: "Scenic Train ride! Then car to Ella. Check-in for 3 nights." },
-            { date: "2024-12-29", title: "Adam's Peak Hike", loc: "Ella", icon: "fa-mountain", details: "Hiking, Tea Plantations, Waterfalls." },
-            { date: "2024-12-30", title: "To Mirissa", loc: "Beach Area", icon: "fa-umbrella-beach", details: "Travel to coast. Explore beaches." },
-            { date: "2024-12-31", title: "Snorkeling & NYE", loc: "Mirissa", icon: "fa-champagne-glasses", details: "Morning: Snorkeling. Evening: New Year's Party!" },
-            { date: "2025-01-01", title: "To Colombo/Negombo", loc: "Near Airport", icon: "fa-car", details: "Travel back towards capital/airport area." },
-            { date: "2025-01-02", title: "Fly to Hyderabad", loc: "Hyderabad", icon: "fa-plane-arrival", details: "Colombo to HYD." },
-            { date: "2025-01-03", title: "Home Sweet Home", loc: "Delhi", icon: "fa-house-chimney", details: "HYD to DEL." }
+            { date: "2025-12-24", title: "Delhi to Hyderabad", loc: "Sneha's Place", icon: "fa-plane-departure", details: "Flight: Indigo (2 PM). Stay at Sneha." },
+            { date: "2025-12-25", title: "Fly to Colombo", loc: "Murphy’s Villa", icon: "fa-plane", details: "HYD to CMB (8:45 AM - 10:45 AM). Relax and check-in." },
+            { date: "2025-12-26", title: "Travel to Sigiriya", loc: "Boutique Hotel", icon: "fa-bus", details: "Travel by Bus. Explore Sigiriya Fortress (Lion Rock)." },
+            { date: "2025-12-27", title: "Sigiriya to Kandy", loc: "Hill Crest Greens", icon: "fa-city", details: "Travel to Kandy. Roam around the city, visit Temple of Tooth." },
+            { date: "2025-12-28", title: "Train to Nuwara Eliya", loc: "Ella Guest House", icon: "fa-train", details: "Scenic Train ride! Then car to Ella. Check-in for 3 nights." },
+            { date: "2025-12-29", title: "Adam's Peak Hike", loc: "Ella", icon: "fa-mountain", details: "Hiking, Tea Plantations, Waterfalls." },
+            { date: "2025-12-30", title: "To Mirissa", loc: "Beach Area", icon: "fa-umbrella-beach", details: "Travel to coast. Explore beaches." },
+            { date: "2025-12-31", title: "Snorkeling & NYE", loc: "Mirissa", icon: "fa-champagne-glasses", details: "Morning: Snorkeling. Evening: New Year's Party!" },
+            { date: "2026-01-01", title: "To Colombo/Negombo", loc: "Near Airport", icon: "fa-car", details: "Travel back towards capital/airport area." },
+            { date: "2026-01-02", title: "Fly to Hyderabad", loc: "Hyderabad", icon: "fa-plane-arrival", details: "Colombo to HYD." },
+            { date: "2026-01-03", title: "Home Sweet Home", loc: "Delhi", icon: "fa-house-chimney", details: "HYD to DEL." }
         ];
 
         const defaultFlights = [
-            { title: "Delhi to Hyderabad", date: "24 Dec", link1: "https://drive.google.com/file/d/12XgJcZeCWtT0Joqf5PbVJeOX-a4L-l1j/view?usp=drive_link", link2: "" },
-            { title: "Hyderabad to Colombo", date: "25 Dec", link1: "https://drive.google.com/file/d/1ipk1moPSCL3FSxHaZ18et44Nkp2hmoUO/view?usp=sharing", link2: "" },
-            { title: "Colombo to Hyderabad", date: "02 Jan", link1: "https://drive.google.com/file/d/1Hy3m38VOvwDACErdxzRupuqNICt1aWj_/view?usp=drive_link", link2: "" },
-            { title: "Hyderabad to Delhi", date: "03 Jan", link1: "https://drive.google.com/file/d/12XgJcZeCWtT0Joqf5PbVJeOX-a4L-l1j/view?usp=drive_link", link2: "" }
+            { title: "Delhi to Hyderabad", date: "2025-12-24", link1: "https://drive.google.com/file/d/12XgJcZeCWtT0Joqf5PbVJeOX-a4L-l1j/view?usp=drive_link", link2: "" },
+            { title: "Hyderabad to Colombo", date: "2025-12-25", link1: "https://drive.google.com/file/d/1ipk1moPSCL3FSxHaZ18et44Nkp2hmoUO/view?usp=sharing", link2: "" },
+            { title: "Colombo to Hyderabad", date: "2026-01-02", link1: "https://drive.google.com/file/d/1Hy3m38VOvwDACErdxzRupuqNICt1aWj_/view?usp=drive_link", link2: "" },
+            { title: "Hyderabad to Delhi", date: "2026-01-03", link1: "https://drive.google.com/file/d/12XgJcZeCWtT0Joqf5PbVJeOX-a4L-l1j/view?usp=drive_link", link2: "" }
         ];
 
         const defaultHotels = [
-            { title: "Sneha's Place, Hyderabad", date: "24 Dec", link1: "", link2: "" },
-            { title: "Murphy’s Villa, Colombo", date: "25 Dec", link1: "", link2: "" },
-            { title: "Boutique Hotel, Sigiriya", date: "26 Dec", link1: "", link2: "" },
-            { title: "Hill Crest Greens, Kandy", date: "27 Dec", link1: "", link2: "" },
-            { title: "Guest House, Ella", date: "28-30 Dec", link1: "", link2: "" },
-            { title: "Beach Stay, Mirissa", date: "30 Dec - 1 Jan", link1: "", link2: "" },
-            { title: "Colombo Stay", date: "1 Jan", link1: "", link2: "" }
+            { title: "Murphy’s Villa, Colombo", date: "2025-12-25", link1: "", link2: "" },
+            { title: "Boutique Hotel, Sigiriya", date: "2025-12-26", link1: "", link2: "" },
+            { title: "Hill Crest Greens, Kandy", date: "2025-12-27", link1: "", link2: "" },
+            { title: "Guest House, Ella", date: "2025-12-28", link1: "", link2: "" },
+            { title: "Beach Stay, Mirissa", date: "2025-12-30", link1: "", link2: "" },
+            { title: "Colombo Stay", date: "2026-01-01", link1: "", link2: "" }
         ];
 
         const defaultVisa = [
@@ -532,12 +541,49 @@
         // --- Logic ---
 
         function updateSriLankaTime() {
-            const options = { timeZone: 'Asia/Colombo', hour: '2-digit', minute: '2-digit', hour12: false };
-            const timeString = new Date().toLocaleTimeString('en-US', options);
-            document.getElementById('sl-time').innerText = timeString;
+            const now = new Date();
+            
+            // 24-hour format
+            const options24 = { timeZone: 'Asia/Colombo', hour: '2-digit', minute: '2-digit', hour12: false };
+            const timeString24 = now.toLocaleTimeString('en-US', options24);
+            
+            // 12-hour format
+            const options12 = { timeZone: 'Asia/Colombo', hour: 'numeric', minute: '2-digit', hour12: true };
+            const timeString12 = now.toLocaleTimeString('en-US', options12);
+
+            const timeEl = document.getElementById('sl-time');
+            const time12El = document.getElementById('sl-time-12');
+
+            if(timeEl) timeEl.innerText = timeString24;
+            if(time12El) time12El.innerText = timeString12;
         }
         setInterval(updateSriLankaTime, 1000);
         updateSriLankaTime();
+
+        // Helper to format YYYY-MM-DD to "25th Dec" for display
+        function formatDateToOrdinal(dateStr) {
+            // Check if string matches YYYY-MM-DD
+            const regex = /^\d{4}-\d{2}-\d{2}$/;
+            if (!regex.test(dateStr)) return dateStr; // Return original if not a date (e.g. "Valid 30 days")
+
+            const dateObj = new Date(dateStr);
+            if (isNaN(dateObj)) return dateStr;
+
+            const day = dateObj.getDate();
+            const month = dateObj.toLocaleDateString('en-US', { month: 'short' });
+
+            const getSuffix = (d) => {
+                if (d > 3 && d < 21) return 'th';
+                switch (d % 10) {
+                    case 1:  return "st";
+                    case 2:  return "nd";
+                    case 3:  return "rd";
+                    default: return "th";
+                }
+            };
+
+            return `${day}${getSuffix(day)} ${month}`;
+        }
 
         function switchTab(tabName) {
             document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
@@ -632,8 +678,7 @@
             const today = new Date().toISOString().split('T')[0];
 
             data.forEach((item, index) => {
-                const dateObj = new Date(item.date);
-                const dayStr = isNaN(dateObj) ? item.date : dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+                const dayStr = formatDateToOrdinal(item.date);
                 const isToday = item.date === today;
                 
                 const bgColor = isToday ? 'bg-teal-50 border-teal-200' : 'bg-white border-gray-100';
@@ -699,6 +744,9 @@
                 let label2 = 'Doc 2';
                 let color = 'teal';
                 
+                // Format Date nicely to "25th Dec" for display
+                const displayDate = formatDateToOrdinal(item.date);
+                
                 if(type === 'flight') { icon = 'fa-plane'; label1 = 'Ticket'; label2 = 'Boarding Pass'; color = 'teal'; }
                 if(type === 'hotel') { icon = 'fa-hotel'; label1 = 'Booking'; label2 = 'Map'; color = 'blue'; }
                 if(type === 'visa') { icon = 'fa-passport'; label1 = 'View Doc'; label2 = 'Other'; color = 'purple'; }
@@ -716,7 +764,7 @@
                         <div class="flex justify-between items-start mb-2 pr-8">
                             <h3 class="font-bold text-lg text-gray-800 leading-tight">${item.title}</h3>
                         </div>
-                        <span class="bg-${color}-50 text-${color}-700 text-xs font-bold px-2 py-1 rounded-md mb-4 inline-block">${item.date}</span>
+                        <span class="bg-${color}-50 text-${color}-700 text-xs font-bold px-2 py-1 rounded-md mb-4 inline-block">${displayDate}</span>
                         
                         <div class="space-y-2 mt-2">
                             ${item.link1 ? `
@@ -911,11 +959,19 @@
             const group2 = document.getElementById('group-2');
             const group4 = document.getElementById('group-4');
             const driveBox = document.getElementById('drive-info-box');
+            const dateInput = document.getElementById('input-2');
             
             // Defaults
             group2.style.display = 'block';
             group4.style.display = 'block';
             driveBox.style.display = 'block';
+            
+            // Smart Input Type (Date Picker for dates, Text for others)
+            if(['flight', 'hotel', 'itinerary'].includes(type)) {
+                dateInput.type = 'date';
+            } else {
+                dateInput.type = 'text';
+            }
             
             document.getElementById('input-3').placeholder = "Paste Drive Link here";
             document.getElementById('input-4').placeholder = "Paste Drive Link here";
