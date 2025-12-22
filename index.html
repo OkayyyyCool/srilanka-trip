@@ -607,23 +607,34 @@
         }
 
         function switchTab(tabName) {
+            // Save state to keep user on same page after refresh
+            localStorage.setItem('activeTab', tabName);
+
             document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.nav-btn i').forEach(el => el.classList.remove('text-teal-600', 'text-gray-400'));
             document.querySelectorAll('.nav-btn i').forEach(el => el.classList.add('text-gray-400'));
             document.querySelectorAll('.nav-btn span').forEach(el => el.classList.remove('text-teal-600', 'text-gray-400'));
             document.querySelectorAll('.nav-btn span').forEach(el => el.classList.add('text-teal-600'));
 
-            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+            const activeSection = document.getElementById(`view-${tabName}`);
+            if (activeSection) {
+                activeSection.classList.remove('hidden');
+            } else {
+                // Fallback if tab doesn't exist
+                document.getElementById('view-dashboard').classList.remove('hidden');
+            }
             
             let navId = 'nav-dashboard';
             if(tabName === 'plan') navId = 'nav-plan';
             if(tabName === 'tools') navId = 'nav-tools';
             
             const btn = document.getElementById(navId);
-            btn.querySelector('i').classList.remove('text-gray-400');
-            btn.querySelector('i').classList.add('text-teal-600');
-            btn.querySelector('span').classList.remove('text-gray-400');
-            btn.querySelector('span').classList.add('text-teal-600');
+            if (btn) {
+                btn.querySelector('i').classList.remove('text-gray-400');
+                btn.querySelector('i').classList.add('text-teal-600');
+                btn.querySelector('span').classList.remove('text-gray-400');
+                btn.querySelector('span').classList.add('text-teal-600');
+            }
             
             document.getElementById('main-container').scrollTop = 0;
         }
@@ -1251,7 +1262,10 @@
         // Run check on load
         checkInstallStatus();
 
-        switchTab('dashboard');
+        // Check for active tab in storage
+        const storedTab = localStorage.getItem('activeTab') || 'dashboard';
+        switchTab(storedTab);
+        
         renderItinerary();
         renderList('flight');
         renderList('hotel');
