@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sri Lanka 2024 ❤️</title>
+    
+    <!-- PWA Manifest & Meta -->
+    <meta name="theme-color" content="#0d9488">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SL Trip">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlNyaSBMYW5rYSBUcmlwIDIwMjQiCwogICJzaG9ydF9uYW1lIjogIlNMIFRyaXAiCwogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29xvciI6ICIjZjBmZGZjIiwKICAidGhlbWVfY29sb3IiOiAiIzBkOTQ4OCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vY2RuLnd3d2xpZmUuY29tL3Byb2plY3RzL2ZsaWdodC1pY29uLnBuZyIsCiAgICAgICJzaXplcyI6ICIxOTJ4MTkyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ==">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .tab-active { color: #0d9488; border-top: 3px solid #0d9488; }
+        .tab-inactive { color: #9ca3af; border-top: 3px solid transparent; }
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+        /* Hide scrollbar for clean look */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e5e7eb;
+            z-index: 0;
+        }
+        
+        /* Modal Animation */
+        .modal-enter { opacity: 0; transform: scale(0.95); }
+        .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 200ms, transform 200ms; }
+        .modal-exit { opacity: 1; transform: scale(1); }
+        .modal-exit-active { opacity: 0; transform: scale(0.95); transition: opacity 200ms, transform 200ms; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen pb-24">
+
+    <!-- Header -->
+    <header class="relative text-white pt-12 pb-6 px-6 rounded-b-[2rem] shadow-lg z-30 sticky top-0 overflow-hidden bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/d/1QY9xE0tbxKJiCxDJCNNnz8jKo7Pz1NSa');">
+        <!-- Overlay for better text readability -->
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+        
+        <div class="absolute top-0 right-0 opacity-10 text-9xl transform translate-x-10 -translate-y-10 rotate-12 z-0">
+            <i class="fa-solid fa-plane"></i>
+        </div>
+        <div class="flex justify-between items-end relative z-10">
+            <div>
+                <p class="text-teal-100 text-sm font-medium mb-1 drop-shadow-md">Dec 24 - Jan 3</p>
+                <h1 class="text-3xl font-bold drop-shadow-md">Stuti's 2025 Year-End Trip</h1>
+            </div>
+            <div class="text-right">
+                <div id="sl-time" class="text-2xl font-bold font-mono drop-shadow-md">--:--</div>
+                <p class="text-xs text-teal-100 drop-shadow-md">Colombo Time</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-container" class="flex-1 relative">
+        
+        <!-- SECTION: DASHBOARD (Default) -->
+        <section id="view-dashboard" class="p-4 space-y-4 fade-in">
+            
+            <!-- PWA Install Prompt (Android/Desktop) - Hidden by default -->
+            <div id="install-prompt" class="hidden bg-gradient-to-r from-teal-600 to-teal-800 rounded-2xl p-4 shadow-lg text-white relative overflow-hidden">
+                 <div class="relative z-10 flex justify-between items-center">
+                     <div>
+                         <h2 class="font-bold text-lg">Install App</h2>
+                         <p class="text-xs text-teal-100">Add to home screen for offline access</p>
+                     </div>
+                     <button onclick="installApp()" class="bg-white text-teal-700 px-4 py-2 rounded-lg font-bold text-sm shadow hover:bg-gray-100 transition">
+                         Install
+                     </button>
+                 </div>
+                 <!-- Decoration -->
+                 <i class="fa-solid fa-mobile-screen absolute -bottom-4 -right-2 text-6xl text-white opacity-10 rotate-12"></i>
+            </div>
+
+            <!-- iOS Install Hint - Hidden by default -->
+            <div id="ios-install-hint" class="hidden bg-gray-100 rounded-xl p-4 border border-gray-200 relative">
+                <button onclick="this.parentElement.style.display='none'" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="flex items-start space-x-3">
+                    <div class="bg-white w-10 h-10 rounded-lg flex items-center justify-center shadow-sm text-blue-500 text-xl shrink-0">
+                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-gray-800">Install on iPhone</h3>
+                        <p class="text-xs text-gray-500 mt-1">Tap the <span class="font-bold">Share</span> button below in Safari, then select <span class="font-bold">"Add to Home Screen"</span>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Connect -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Quick Connect</h2>
+                <!-- Dynamic Contacts Container -->
+                <div id="contacts-container" class="grid grid-cols-2 gap-4">
+                    <!-- Javascript will inject contacts here -->
+                </div>
+            </div>
+
+            <!-- Documents Links -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Important Docs</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Flights -->
+                    <button onclick="switchTab('flights')" class="bg-teal-50 border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-100 transition w-full text-left">
+                        <i class="fa-solid fa-ticket text-teal-600"></i>
+                        <span class="text-sm font-medium text-teal-900">Flights</span>
+                    </button>
+
+                    <!-- Hotels -->
+                    <button onclick="switchTab('hotels')" class="bg-teal-50 border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-100 transition w-full text-left">
+                        <i class="fa-solid fa-hotel text-teal-600"></i>
+                        <span class="text-sm font-medium text-teal-900">Hotels</span>
+                    </button>
+                    
+                    <!-- Visa/Ins -->
+                    <button onclick="switchTab('visa')" class="bg-teal-50 border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-100 transition w-full text-left">
+                        <i class="fa-solid fa-passport text-teal-600"></i>
+                        <span class="text-sm font-medium text-teal-900">Visa & Other docs</span>
+                    </button>
+                    
+                    <!-- Map (New Link) -->
+                    <button onclick="switchTab('map')" class="bg-teal-50 border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-100 transition w-full text-left">
+                        <i class="fa-solid fa-map text-teal-600"></i>
+                        <span class="text-sm font-medium text-teal-900">Map</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SOS / Emergency -->
+            <div class="bg-red-50 rounded-2xl p-5 shadow-sm border border-red-100">
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
+                    <h2 class="text-xs font-bold text-red-600 uppercase tracking-wider">Emergency</h2>
+                </div>
+                <div class="space-y-3">
+                    <!-- Indian High Commission (Updated with Map & New Number) -->
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-red-100 flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <span class="font-bold text-sm text-gray-800">Indian High Commission</span>
+                            <span class="text-xs text-gray-500">Colombo • 24/7 Helpline</span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <!-- Map Button -->
+                            <a href="https://maps.app.goo.gl/2mj4LwLkhvBUTu6U6" target="_blank" class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 border border-teal-100 active:scale-95 transition">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </a>
+                            <!-- Web Button -->
+                            <a href="https://www.hcicolombo.gov.in/page/contact-us/" target="_blank" class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100 active:scale-95 transition">
+                                <i class="fa-solid fa-globe"></i>
+                            </a>
+                            <!-- Call Button -->
+                            <a href="tel:+94773727832" class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white shadow-md active:scale-95 transition">
+                                <i class="fa-solid fa-phone"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-3">
+                        <a href="tel:119" class="flex-1 bg-white p-3 rounded-xl shadow-sm border border-gray-200 text-center">
+                            <div class="text-xl font-bold text-gray-800">119</div>
+                            <div class="text-xs text-gray-500">Police</div>
+                        </a>
+                        <a href="tel:110" class="flex-1 bg-white p-3 rounded-xl shadow-sm border border-gray-200 text-center">
+                            <div class="text-xl font-bold text-gray-800">110</div>
+                            <div class="text-xs text-gray-500">Ambulance</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Love Footer -->
+            <div class="text-center text-xs text-gray-400 mt-8 mb-8 pb-4">
+                Made with 💖 by Kim-Shin
+            </div>
+        </section>
+
+        <!-- SECTION: FLIGHTS -->
+        <section id="view-flights" class="p-4 hidden pb-20">
+            <button onclick="switchTab('dashboard')" class="mb-4 flex items-center text-teal-600 font-medium text-sm">
+                <i class="fa-solid fa-chevron-left mr-2"></i> Back to Dashboard
+            </button>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Flight Tickets</h2>
+                <a href="https://drive.google.com/drive/folders/1Bkudvme9YJJqUq0f1gbVRW0QaH_QBznN?usp=sharing" target="_blank" class="text-xs text-teal-600 font-medium underline">Open Drive Folder</a>
+            </div>
+            <div id="flights-container" class="space-y-4"></div>
+            <button onclick="openModal('flight')" class="w-full mt-6 py-4 rounded-xl border-2 border-dashed border-gray-300 text-gray-500 font-medium flex items-center justify-center space-x-2 hover:bg-gray-50 transition">
+                <i class="fa-solid fa-plus"></i><span>Add Another Flight</span>
+            </button>
+        </section>
+
+        <!-- SECTION: HOTELS -->
+        <section id="view-hotels" class="p-4 hidden pb-20">
+            <button onclick="switchTab('dashboard')" class="mb-4 flex items-center text-teal-600 font-medium text-sm">
+                <i class="fa-solid fa-chevron-left mr-2"></i> Back to Dashboard
+            </button>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Hotel Bookings</h2>
+                <a href="https://drive.google.com/drive/folders/1Bkudvme9YJJqUq0f1gbVRW0QaH_QBznN?usp=sharing" target="_blank" class="text-xs text-teal-600 font-medium underline">Open Drive Folder</a>
+            </div>
+            <div id="hotels-container" class="space-y-4"></div>
+            <button onclick="openModal('hotel')" class="w-full mt-6 py-4 rounded-xl border-2 border-dashed border-gray-300 text-gray-500 font-medium flex items-center justify-center space-x-2 hover:bg-gray-50 transition">
+                <i class="fa-solid fa-plus"></i><span>Add Another Stay</span>
+            </button>
+        </section>
+
+        <!-- SECTION: VISA -->
+        <section id="view-visa" class="p-4 hidden pb-20">
+            <button onclick="switchTab('dashboard')" class="mb-4 flex items-center text-teal-600 font-medium text-sm">
+                <i class="fa-solid fa-chevron-left mr-2"></i> Back to Dashboard
+            </button>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Visa & Docs</h2>
+                <a href="https://drive.google.com/drive/folders/1Bkudvme9YJJqUq0f1gbVRW0QaH_QBznN?usp=sharing" target="_blank" class="text-xs text-teal-600 font-medium underline">Open Drive Folder</a>
+            </div>
+            <div id="visas-container" class="space-y-4"></div>
+            <button onclick="openModal('visa')" class="w-full mt-6 py-4 rounded-xl border-2 border-dashed border-gray-300 text-gray-500 font-medium flex items-center justify-center space-x-2 hover:bg-gray-50 transition">
+                <i class="fa-solid fa-plus"></i><span>Add Document</span>
+            </button>
+        </section>
+
+        <!-- SECTION: MAP & TRANSPORT -->
+        <section id="view-map" class="p-4 hidden pb-20">
+            <button onclick="switchTab('dashboard')" class="mb-4 flex items-center text-teal-600 font-medium text-sm">
+                <i class="fa-solid fa-chevron-left mr-2"></i> Back to Dashboard
+            </button>
+            
+            <!-- Transport Header -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold mb-4">Taxi & Transport</h2>
+                <div class="grid grid-cols-1 gap-4">
+                     <!-- Uber -->
+                     <a href="https://m.uber.com/ul" target="_blank" class="bg-black text-white p-4 rounded-xl flex items-center justify-between shadow-lg active:scale-95 transition">
+                         <div class="flex items-center space-x-3">
+                             <div class="bg-gray-800 w-10 h-10 rounded-full flex items-center justify-center">
+                                <i class="fa-brands fa-uber text-xl"></i>
+                             </div>
+                             <div>
+                                 <span class="font-bold block">Uber</span>
+                                 <span class="text-xs text-gray-400">Request a ride</span>
+                             </div>
+                         </div>
+                         <i class="fa-solid fa-chevron-right text-gray-600"></i>
+                     </a>
+                     
+                     <!-- PickMe -->
+                     <div class="bg-yellow-400 text-black p-4 rounded-xl shadow-lg">
+                         <div class="flex items-center space-x-3 mb-3">
+                             <div class="bg-yellow-500/50 w-10 h-10 rounded-full flex items-center justify-center border border-yellow-600/20">
+                                <i class="fa-solid fa-taxi text-xl"></i>
+                             </div>
+                             <div>
+                                 <span class="font-bold block">PickMe Sri Lanka</span>
+                                 <span class="text-xs font-medium opacity-70">Best Local Taxi App</span>
+                             </div>
+                         </div>
+                         
+                         <div class="flex space-x-2">
+                             <a href="https://apps.apple.com/lk/app/pickme-sri-lanka/id1006015699" target="_blank" class="flex-1 bg-black text-white py-2 px-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-900 transition">
+                                 <i class="fa-brands fa-apple text-lg"></i>
+                                 <div class="text-left leading-tight">
+                                     <div class="text-[8px] uppercase text-gray-400">Download on</div>
+                                     <div class="text-xs font-bold">App Store</div>
+                                 </div>
+                             </a>
+                             <a href="https://play.google.com/store/apps/details?id=com.pickme.passenger" target="_blank" class="flex-1 bg-black text-white py-2 px-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-900 transition">
+                                 <i class="fa-brands fa-google-play text-lg"></i>
+                                 <div class="text-left leading-tight">
+                                     <div class="text-[8px] uppercase text-gray-400">Get it on</div>
+                                     <div class="text-xs font-bold">Google Play</div>
+                                 </div>
+                             </a>
+                         </div>
+                     </div>
+                </div>
+            </div>
+
+            <!-- Locations -->
+            <h2 class="text-xl font-bold mb-4">Trip Locations</h2>
+            
+            <div id="maps-container" class="space-y-4">
+               <!-- Dynamic Map Cards -->
+            </div>
+            
+            <button onclick="openModal('map')" class="w-full mt-6 py-4 rounded-xl border-2 border-dashed border-gray-300 text-gray-500 font-medium flex items-center justify-center space-x-2 hover:bg-gray-50 transition">
+                <i class="fa-solid fa-plus"></i><span>Add Location</span>
+            </button>
+        </section>
+
+        <!-- SECTION: ITINERARY (Plan) -->
+        <section id="view-plan" class="p-4 hidden pb-20">
+            <h2 class="text-xl font-bold mb-6 px-2">Your Itinerary</h2>
+            <div class="relative pl-2" id="itinerary-container">
+                <div class="timeline-line"></div>
+            </div>
+            <button onclick="openModal('itinerary')" class="w-full mt-6 py-4 rounded-xl border-2 border-dashed border-gray-300 text-gray-500 font-medium flex items-center justify-center space-x-2 hover:bg-gray-50 transition">
+                <i class="fa-solid fa-plus"></i><span>Add New Plan</span>
+            </button>
+        </section>
+
+        <!-- SECTION: TOOLS (Translate) -->
+        <section id="view-tools" class="p-4 hidden pb-24">
+            
+             <!-- Type and Translate (New) -->
+            <div class="bg-gradient-to-br from-teal-500 to-teal-700 rounded-2xl p-6 shadow-md mb-6 text-white">
+                <h3 class="font-bold text-lg mb-2"><i class="fa-solid fa-language mr-2"></i>Type & Translate</h3>
+                <p class="text-xs text-teal-100 mb-4">Type in English to translate to Sinhala on Google.</p>
+                <div class="space-y-3">
+                    <textarea id="translate-input" rows="2" class="w-full rounded-xl p-3 text-gray-800 text-sm outline-none shadow-inner" placeholder="Type here (e.g. I am lost)"></textarea>
+                    <button onclick="openGoogleTranslate()" class="w-full bg-white text-teal-700 font-bold py-3 rounded-xl shadow hover:bg-gray-50 transition active:scale-95 flex items-center justify-center space-x-2">
+                        <span>Translate on Google</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Currency Converter -->
+            <div class="bg-white rounded-2xl p-6 shadow-md mb-6 relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 text-gray-100 text-9xl z-0">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+                <h3 class="font-bold text-lg mb-4 relative z-10">Rupee Converter</h3>
+                <div class="space-y-4 relative z-10">
+                    <div>
+                        <label class="text-xs text-gray-500 font-bold uppercase">Indian Rupee (INR)</label>
+                        <input type="number" id="inr-input" placeholder="100" class="w-full text-2xl font-bold border-b-2 border-teal-100 focus:border-teal-600 outline-none py-2 bg-transparent">
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <i class="fa-solid fa-arrow-down text-teal-600"></i>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 font-bold uppercase">Sri Lankan Rupee (LKR)</label>
+                        <div id="lkr-output" class="text-3xl font-bold text-teal-700">350.00</div>
+                        <p class="text-xs text-gray-400 mt-1">*Approx rate: 1 INR = 3.5 LKR</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Translate Cards -->
+            <h3 class="font-bold text-lg mb-4 px-2">Common Phrases</h3>
+            <div id="translate-container" class="grid gap-3">
+               <!-- JS will inject translations -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Dynamic Modal -->
+    <div id="universal-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-xl transform transition-all scale-95 opacity-0" id="universal-modal-content">
+            <h3 class="text-lg font-bold mb-4" id="modal-title">Add Details</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" id="label-1">Title</label>
+                    <input type="text" id="input-1" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                </div>
+                <div id="group-2">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" id="label-2">Date</label>
+                    <input type="text" id="input-2" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                </div>
+                
+                <div id="drive-info-box" class="bg-blue-50 p-3 rounded-lg border border-blue-100">
+                    <p class="text-xs text-blue-800 mb-2"><i class="fa-solid fa-circle-info mr-1"></i> Upload to Drive first, then paste link.</p>
+                    <a href="https://drive.google.com/drive/folders/1Bkudvme9YJJqUq0f1gbVRW0QaH_QBznN?usp=sharing" target="_blank" class="block w-full text-center bg-white text-blue-600 py-2 rounded border border-blue-200 text-xs font-bold hover:bg-blue-50">Open Drive Folder</a>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" id="label-3">Link 1</label>
+                    <input type="text" id="input-3" placeholder="Paste Drive Link here" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                </div>
+                <div id="group-4">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" id="label-4">Link 2</label>
+                    <input type="text" id="input-4" placeholder="Paste Drive Link here" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm focus:border-teal-500 outline-none">
+                </div>
+            </div>
+
+            <div class="flex space-x-3 mt-6">
+                <button onclick="closeModal()" class="flex-1 py-3 text-gray-500 font-medium">Cancel</button>
+                <button onclick="saveItem()" class="flex-1 bg-teal-600 text-white rounded-xl font-bold shadow-lg hover:bg-teal-700">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bg-white border-t border-gray-200 pb-safe pt-2 px-6 flex justify-between items-center z-50 h-20 shadow-[0_-5px_10px_rgba(0,0,0,0.02)] fixed bottom-0 w-full left-0">
+        <button onclick="switchTab('dashboard')" class="nav-btn flex flex-col items-center space-y-1 w-16" id="nav-dashboard">
+            <i class="fa-solid fa-house text-xl mb-1"></i><span class="text-[10px] font-medium">Home</span>
+        </button>
+        <button onclick="switchTab('plan')" class="nav-btn flex flex-col items-center space-y-1 w-16" id="nav-plan">
+            <i class="fa-solid fa-map-location-dot text-xl mb-1"></i><span class="text-[10px] font-medium">Plan</span>
+        </button>
+        <button onclick="switchTab('tools')" class="nav-btn flex flex-col items-center space-y-1 w-16" id="nav-tools">
+            <i class="fa-solid fa-briefcase text-xl mb-1"></i><span class="text-[10px] font-medium">Tools</span>
+        </button>
+    </nav>
+
+    <script>
+        // --- Data & State ---
+        let currentType = ''; // 'flight', 'hotel', 'visa', 'contact', 'map', 'itinerary'
+        let currentEditIndex = -1;
+
+        const defaultItinerary = [
+            { date: "2024-12-24", title: "Delhi to Hyderabad", loc: "Sneha's Place", icon: "fa-plane-departure", details: "Flight: Indigo (2 PM). Stay at Sneha." },
+            { date: "2024-12-25", title: "Fly to Colombo", loc: "Murphy’s Villa", icon: "fa-plane", details: "HYD to CMB (8:45 AM - 10:45 AM). Relax and check-in." },
+            { date: "2024-12-26", title: "Travel to Sigiriya", loc: "Boutique Hotel", icon: "fa-bus", details: "Travel by Bus. Explore Sigiriya Fortress (Lion Rock)." },
+            { date: "2024-12-27", title: "Sigiriya to Kandy", loc: "Hill Crest Greens", icon: "fa-city", details: "Travel to Kandy. Roam around the city, visit Temple of Tooth." },
+            { date: "2024-12-28", title: "Train to Nuwara Eliya", loc: "Ella Guest House", icon: "fa-train", details: "Scenic Train ride! Then car to Ella. Check-in for 3 nights." },
+            { date: "2024-12-29", title: "Adam's Peak Hike", loc: "Ella", icon: "fa-mountain", details: "Hiking, Tea Plantations, Waterfalls." },
+            { date: "2024-12-30", title: "To Mirissa", loc: "Beach Area", icon: "fa-umbrella-beach", details: "Travel to coast. Explore beaches." },
+            { date: "2024-12-31", title: "Snorkeling & NYE", loc: "Mirissa", icon: "fa-champagne-glasses", details: "Morning: Snorkeling. Evening: New Year's Party!" },
+            { date: "2025-01-01", title: "To Colombo/Negombo", loc: "Near Airport", icon: "fa-car", details: "Travel back towards capital/airport area." },
+            { date: "2025-01-02", title: "Fly to Hyderabad", loc: "Hyderabad", icon: "fa-plane-arrival", details: "Colombo to HYD." },
+            { date: "2025-01-03", title: "Home Sweet Home", loc: "Delhi", icon: "fa-house-chimney", details: "HYD to DEL." }
+        ];
+
+        const defaultFlights = [
+            { title: "Delhi to Hyderabad", date: "24 Dec", link1: "https://drive.google.com/file/d/12XgJcZeCWtT0Joqf5PbVJeOX-a4L-l1j/view?usp=drive_link", link2: "" },
+            { title: "Hyderabad to Colombo", date: "25 Dec", link1: "https://drive.google.com/file/d/1ipk1moPSCL3FSxHaZ18et44Nkp2hmoUO/view?usp=sharing", link2: "" },
+            { title: "Colombo to Hyderabad", date: "02 Jan", link1: "https://drive.google.com/file/d/1Hy3m38VOvwDACErdxzRupuqNICt1aWj_/view?usp=drive_link", link2: "" },
+            { title: "Hyderabad to Delhi", date: "03 Jan", link1: "https://drive.google.com/file/d/12XgJcZeCWtT0Joqf5PbVJeOX-a4L-l1j/view?usp=drive_link", link2: "" }
+        ];
+
+        const defaultHotels = [
+            { title: "Sneha's Place, Hyderabad", date: "24 Dec", link1: "", link2: "" },
+            { title: "Murphy’s Villa, Colombo", date: "25 Dec", link1: "", link2: "" },
+            { title: "Boutique Hotel, Sigiriya", date: "26 Dec", link1: "", link2: "" },
+            { title: "Hill Crest Greens, Kandy", date: "27 Dec", link1: "", link2: "" },
+            { title: "Guest House, Ella", date: "28-30 Dec", link1: "", link2: "" },
+            { title: "Beach Stay, Mirissa", date: "30 Dec - 1 Jan", link1: "", link2: "" },
+            { title: "Colombo Stay", date: "1 Jan", link1: "", link2: "" }
+        ];
+
+        const defaultVisa = [
+            { title: "Sri Lanka Visa", date: "Valid 30 days from arrival", link1: "", link2: "" },
+            { title: "Travel Insurance", date: "Full Trip", link1: "", link2: "" }
+        ];
+        
+        const defaultMaps = [
+            { title: "Murphy’s Villa", loc: "Colombo", query: "Murphy’s Villa, Colombo" },
+            { title: "Sigiriya Fortress", loc: "Sigiriya", query: "Sigiriya Lion Rock" },
+            { title: "Hill Crest Greens", loc: "Kandy", query: "Hill Crest Greens, Kandy" },
+            { title: "Ella Town", loc: "Ella", query: "Ella, Sri Lanka" },
+            { title: "Adam's Peak", loc: "Sripada", query: "Adam's Peak Sri Lanka" },
+            { title: "Mirissa Beach", loc: "Mirissa", query: "Mirissa Beach" },
+            { title: "Sneha's Place", loc: "Hyderabad", query: "Hyderabad, Telangana" }
+        ];
+        
+        const defaultContacts = [
+            { title: "Shreyans", date: "Boyfriend", link1: "918588061305", link2: "918588061305", color: "blue", image: "https://drive.google.com/thumbnail?id=1AiZDYJ2mWAyJpTj9jj2lU2WKDLYqgwps&sz=w200" },
+            { title: "Samridhi", date: "Sister", link1: "918586960219", link2: "918586960219", color: "purple", image: "https://drive.google.com/thumbnail?id=1RpodMqKokrQfoBxuOc1Hc2R0Nw7_xexj&sz=w200" }
+        ];
+
+        const translations = [
+            { en: "Take me to the hotel", si: "Mawa hotel ekata geniyanna" },
+            { en: "Stop here", si: "Methana nawaththanna" },
+            { en: "How much?", si: "Keeyada?" },
+            { en: "Thank you", si: "Istuthi" },
+            { en: "Too expensive", si: "Gana wadi" },
+            { en: "Water please", si: "Wathura dennna" },
+            { en: "Bill please", si: "Bill eka denna" },
+            { en: "I don't want", si: "Epa" },
+            { en: "Vegetarian?", si: "Eli-valu vitharak?" },
+            { en: "Where is the bathroom?", si: "Washroom koheda?" }
+        ];
+
+        // --- Logic ---
+
+        function updateSriLankaTime() {
+            const options = { timeZone: 'Asia/Colombo', hour: '2-digit', minute: '2-digit', hour12: false };
+            const timeString = new Date().toLocaleTimeString('en-US', options);
+            document.getElementById('sl-time').innerText = timeString;
+        }
+        setInterval(updateSriLankaTime, 1000);
+        updateSriLankaTime();
+
+        function switchTab(tabName) {
+            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn i').forEach(el => el.classList.remove('text-teal-600', 'text-gray-400'));
+            document.querySelectorAll('.nav-btn i').forEach(el => el.classList.add('text-gray-400'));
+            document.querySelectorAll('.nav-btn span').forEach(el => el.classList.remove('text-teal-600', 'text-gray-400'));
+            document.querySelectorAll('.nav-btn span').forEach(el => el.classList.add('text-teal-600'));
+
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+            
+            let navId = 'nav-dashboard';
+            if(tabName === 'plan') navId = 'nav-plan';
+            if(tabName === 'tools') navId = 'nav-tools';
+            
+            const btn = document.getElementById(navId);
+            btn.querySelector('i').classList.remove('text-gray-400');
+            btn.querySelector('i').classList.add('text-teal-600');
+            btn.querySelector('span').classList.remove('text-gray-400');
+            btn.querySelector('span').classList.add('text-teal-600');
+            
+            document.getElementById('main-container').scrollTop = 0;
+        }
+        
+        // --- Translation Logic ---
+        function openGoogleTranslate() {
+            const text = document.getElementById('translate-input').value;
+            if(!text) {
+                alert("Please type something to translate.");
+                return;
+            }
+            // Use Google Search for translation (more reliable on mobile than app deep links)
+            const url = `https://www.google.com/search?q=translate+${encodeURIComponent(text)}+to+sinhala`;
+            window.open(url, '_blank');
+        }
+
+        // --- Generic Data Loading ---
+        function loadData(type) {
+            const key = `sl_trip_${type}s`;
+            const stored = localStorage.getItem(key);
+            if(stored) return JSON.parse(stored);
+            
+            if(type === 'flight') return defaultFlights;
+            if(type === 'hotel') return defaultHotels;
+            if(type === 'visa') return defaultVisa;
+            if(type === 'contact') return defaultContacts;
+            if(type === 'map') return defaultMaps;
+            if(type === 'itinerary') return defaultItinerary;
+            return [];
+        }
+
+        function saveData(type, data) {
+            localStorage.setItem(`sl_trip_${type}s`, JSON.stringify(data));
+        }
+        
+        function deleteItem(type, index) {
+            if(!confirm("Are you sure you want to delete this?")) return;
+            const data = loadData(type);
+            data.splice(index, 1);
+            saveData(type, data);
+            
+            if(type === 'contact') renderContacts();
+            else if(type === 'map') renderMaps();
+            else if(type === 'itinerary') renderItinerary();
+            else renderList(type);
+        }
+
+        // --- Renderers ---
+
+        function renderItinerary() {
+            const data = loadData('itinerary');
+            const container = document.getElementById('itinerary-container');
+            container.innerHTML = '<div class="timeline-line"></div>';
+            
+            const today = new Date().toISOString().split('T')[0];
+
+            data.forEach((item, index) => {
+                const dateObj = new Date(item.date);
+                const dayStr = isNaN(dateObj) ? item.date : dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+                const isToday = item.date === today;
+                
+                const bgColor = isToday ? 'bg-teal-50 border-teal-200' : 'bg-white border-gray-100';
+                const dotColor = isToday ? 'bg-teal-600 animate-pulse' : 'bg-teal-200';
+
+                const html = `
+                    <div class="relative pl-10 pr-2 mb-6 transition-all duration-300">
+                        <!-- Timeline Dot -->
+                        <div class="absolute left-[14px] top-4 w-3 h-3 rounded-full ${dotColor} border-2 border-white z-10"></div>
+                        
+                        <div class="rounded-xl p-4 shadow-sm border ${bgColor} relative overflow-hidden group">
+                             <!-- Edit/Delete Buttons (Top Right) -->
+                             <div class="absolute top-3 right-3 flex space-x-2 z-20">
+                                <button onclick="openModal('itinerary', ${index})" class="text-gray-300 hover:text-teal-600 transition p-1 bg-white/80 rounded-full shadow-sm">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                </button>
+                                <button onclick="deleteItem('itinerary', ${index})" class="text-gray-300 hover:text-red-500 transition p-1 bg-white/80 rounded-full shadow-sm">
+                                    <i class="fa-solid fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                            
+                            ${isToday ? '<div class="absolute top-0 left-0 bg-teal-600 text-white text-[10px] px-2 py-1 rounded-br-lg font-bold z-10">TODAY</div>' : ''}
+                            
+                            <!-- Date Row -->
+                            <div class="mb-2 ${isToday ? 'mt-4' : ''}">
+                                <span class="text-xs font-bold text-gray-400 uppercase tracking-wide">${dayStr}</span>
+                            </div>
+
+                            <!-- Title & Icon Row -->
+                            <div class="flex items-start space-x-3 mb-2 pr-16">
+                                <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 shrink-0 mt-0.5">
+                                    <i class="fa-solid ${item.icon || 'fa-location-dot'}"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-gray-800 leading-tight">${item.title}</h3>
+                            </div>
+
+                            <!-- Details Column (Indented) -->
+                            <div class="pl-13 ml-12"> <!-- indented to align with text -->
+                                <div class="flex items-center text-sm text-gray-600 mb-2">
+                                    <i class="fa-solid fa-bed text-gray-400 mr-2 text-xs"></i>
+                                    <span>${item.loc}</span>
+                                </div>
+                                <div class="text-sm text-gray-500 bg-gray-50/50 p-3 rounded-lg border border-gray-100">
+                                    ${item.details}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function renderList(type) {
+            const data = loadData(type);
+            const container = document.getElementById(`${type}s-container`);
+            if(!container) return; 
+            container.innerHTML = '';
+
+            data.forEach((item, index) => {
+                let icon = 'fa-file';
+                let label1 = 'Document';
+                let label2 = 'Doc 2';
+                let color = 'teal';
+                
+                if(type === 'flight') { icon = 'fa-plane'; label1 = 'Ticket'; label2 = 'Boarding Pass'; color = 'teal'; }
+                if(type === 'hotel') { icon = 'fa-hotel'; label1 = 'Booking'; label2 = 'Map'; color = 'blue'; }
+                if(type === 'visa') { icon = 'fa-passport'; label1 = 'View Doc'; label2 = 'Other'; color = 'purple'; }
+
+                const html = `
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 relative group">
+                        <div class="absolute top-4 right-4 flex space-x-2 z-20">
+                            <button onclick="openModal('${type}', ${index})" class="text-gray-300 hover:text-teal-600 transition p-1">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="deleteItem('${type}', ${index})" class="text-gray-300 hover:text-red-500 transition p-1">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="flex justify-between items-start mb-2 pr-8">
+                            <h3 class="font-bold text-lg text-gray-800 leading-tight">${item.title}</h3>
+                        </div>
+                        <span class="bg-${color}-50 text-${color}-700 text-xs font-bold px-2 py-1 rounded-md mb-4 inline-block">${item.date}</span>
+                        
+                        <div class="space-y-2 mt-2">
+                            ${item.link1 ? `
+                                <a href="${item.link1}" target="_blank" class="flex items-center justify-between p-3 rounded-lg border border-${color}-100 bg-${color}-50/50 hover:bg-${color}-100 transition group">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-${color}-600 shadow-sm">
+                                            <i class="fa-solid ${icon}"></i>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-700 group-hover:text-${color}-800">${label1}</span>
+                                    </div>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-xs text-${color}-400"></i>
+                                </a>
+                            ` : `
+                                <button onclick="openModal('${type}', ${index})" class="w-full flex items-center justify-between p-3 rounded-lg border border-dashed border-${color}-200 text-center text-xs text-${color}-400 hover:bg-${color}-50 hover:border-${color}-300 transition">
+                                     <span class="w-full">Add ${label1} +</span>
+                                </button>
+                            `}
+
+                            ${type === 'flight' ? (item.link2 ? `
+                                <a href="${item.link2}" target="_blank" class="flex items-center justify-between p-3 rounded-lg border border-purple-100 bg-purple-50/50 hover:bg-purple-100 transition group">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-purple-600 shadow-sm">
+                                            <i class="fa-solid fa-ticket"></i>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-700 group-hover:text-purple-800">${label2}</span>
+                                    </div>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-xs text-purple-400"></i>
+                                </a>
+                            ` : `
+                                <button onclick="openModal('${type}', ${index})" class="w-full flex items-center justify-between p-3 rounded-lg border border-dashed border-purple-200 bg-purple-50/30 hover:bg-purple-50 hover:border-purple-300 transition group cursor-pointer">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-gray-300 shadow-sm group-hover:text-purple-400">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-400 group-hover:text-purple-600">Add ${label2}</span>
+                                    </div>
+                                </button>
+                            `) : ''}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+        
+        function renderContacts() {
+            const data = loadData('contact');
+            const container = document.getElementById('contacts-container');
+            container.innerHTML = '';
+            
+            data.forEach((item, index) => {
+                const colors = ['blue', 'purple', 'teal', 'orange'];
+                const color = item.color || colors[index % colors.length];
+                const initial = item.title.charAt(0);
+                
+                const isMainContact = (item.title === 'Shreyans' || item.title === 'Samridhi');
+                
+                // Image handling
+                const avatar = item.image 
+                    ? `<img src="${item.image}" class="w-10 h-10 rounded-full object-cover border border-${color}-200" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` 
+                    : '';
+                const fallbackAvatar = `<div class="w-10 h-10 bg-${color}-100 rounded-full flex items-center justify-center text-${color}-600 font-bold uppercase" style="${item.image ? 'display:none' : ''}">${initial}</div>`;
+                
+                const html = `
+                    <div class="bg-${color}-50 rounded-xl p-3 flex flex-col items-center justify-center space-y-2 border border-${color}-100 relative group">
+                        <div class="absolute top-1 right-1 flex space-x-1">
+                            <button onclick="openModal('contact', ${index})" class="text-${color}-200 hover:text-${color}-600 transition p-1">
+                                <i class="fa-solid fa-pen-to-square text-xs"></i>
+                            </button>
+                            ${!isMainContact ? `
+                            <button onclick="deleteItem('contact', ${index})" class="text-${color}-200 hover:text-red-500 transition p-1">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>` : ''}
+                        </div>
+                        
+                        ${avatar}
+                        ${fallbackAvatar}
+                        <div class="text-center leading-tight">
+                            <span class="font-semibold text-sm block">${item.title}</span>
+                            <span class="text-[10px] text-gray-500 uppercase">${item.date}</span>
+                        </div>
+                        <div class="flex space-x-2 w-full">
+                            <a href="tel:${item.link1}" class="flex-1 bg-white hover:bg-${color}-600 hover:text-white text-${color}-600 py-2 rounded-lg text-center transition shadow-sm border border-${color}-100">
+                                <i class="fa-solid fa-phone"></i>
+                            </a>
+                            <a href="https://wa.me/${item.link2 || item.link1}" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-center shadow-sm">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+
+            const addBtn = `
+                <button onclick="openModal('contact')" class="bg-gray-50 rounded-xl p-3 flex flex-col items-center justify-center space-y-2 border-2 border-dashed border-gray-200 text-gray-400 hover:bg-gray-100 hover:border-gray-300 transition">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <span class="font-medium text-xs">Add New</span>
+                </button>
+            `;
+            container.innerHTML += addBtn;
+        }
+        
+        function renderMaps() {
+            const data = loadData('map');
+            const container = document.getElementById('maps-container');
+            container.innerHTML = '';
+            
+            data.forEach((map, index) => {
+                const mapLink = map.query.startsWith('http') ? map.query : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(map.query)}`;
+                
+                const html = `
+                    <div class="block bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:bg-gray-50 transition relative group">
+                         <div class="absolute top-4 right-2 flex space-x-2 z-20">
+                            <button onclick="openModal('map', ${index})" class="text-gray-300 hover:text-teal-600 transition p-1">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="deleteItem('map', ${index})" class="text-gray-300 hover:text-red-500 transition p-1">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                        <a href="${mapLink}" target="_blank" class="flex items-center justify-between pr-16">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-teal-600">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">${map.title}</h4>
+                                    <p class="text-xs text-gray-500">${map.loc}</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+                        </a>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+        
+        function renderTranslations() {
+            const container = document.getElementById('translate-container');
+            container.innerHTML = '';
+            
+            translations.forEach(t => {
+                const html = `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex justify-between items-center">
+                        <div>
+                            <p class="text-xs text-gray-400 uppercase">English</p>
+                            <p class="font-medium text-gray-800">${t.en}</p>
+                        </div>
+                        <div class="text-right flex flex-col items-end pl-4">
+                            <p class="text-xs text-teal-600 uppercase">Sinhala</p>
+                            <div class="flex items-center space-x-2 mt-1">
+                                <button onclick="playAudio('${t.si}')" class="shrink-0 text-teal-600 hover:text-teal-700 active:scale-95 transition bg-teal-50 w-10 h-10 rounded-full flex items-center justify-center border border-teal-100 shadow-sm">
+                                    <i class="fa-solid fa-volume-high text-sm"></i>
+                                </button>
+                                <p class="font-bold text-lg text-gray-800">${t.si}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+        
+        function playAudio(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'si-LK'; // Attempt Sinhala
+                // Fallback: If Sinhala isn't supported, it often plays using the default voice or does nothing.
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Audio not supported on this device.");
+            }
+        }
+
+        // --- Modal Logic ---
+        function openModal(type, index = -1) {
+            currentType = type;
+            currentEditIndex = index;
+            
+            const modal = document.getElementById('universal-modal');
+            const content = document.getElementById('universal-modal-content');
+            
+            // Labels
+            const titleLabel = document.getElementById('label-1');
+            const dateLabel = document.getElementById('label-2');
+            const link1Label = document.getElementById('label-3');
+            const link2Label = document.getElementById('label-4');
+            const group2 = document.getElementById('group-2');
+            const group4 = document.getElementById('group-4');
+            const driveBox = document.getElementById('drive-info-box');
+            
+            // Defaults
+            group2.style.display = 'block';
+            group4.style.display = 'block';
+            driveBox.style.display = 'block';
+            
+            document.getElementById('input-3').placeholder = "Paste Drive Link here";
+            document.getElementById('input-4').placeholder = "Paste Drive Link here";
+            
+            // Specific Logic
+            if(type === 'flight') {
+                document.getElementById('modal-title').innerText = index > -1 ? "Edit Flight" : "Add Flight";
+                titleLabel.innerText = "Flight Name (e.g. Del to Hyd)";
+                dateLabel.innerText = "Date";
+                link1Label.innerText = "Ticket Link";
+                link2Label.innerText = "Boarding Pass Link";
+            } else if(type === 'hotel') {
+                document.getElementById('modal-title').innerText = index > -1 ? "Edit Hotel" : "Add Hotel";
+                titleLabel.innerText = "Hotel Name & Location";
+                dateLabel.innerText = "Check-in Date";
+                link1Label.innerText = "Booking PDF Link";
+                group4.style.display = 'none'; 
+            } else if(type === 'visa') {
+                document.getElementById('modal-title').innerText = index > -1 ? "Edit Document" : "Add Document";
+                titleLabel.innerText = "Document Name";
+                dateLabel.innerText = "Validity / Notes";
+                link1Label.innerText = "Document Link";
+                group4.style.display = 'none';
+            } else if(type === 'contact') {
+                document.getElementById('modal-title').innerText = index > -1 ? "Edit Contact" : "Add Contact";
+                titleLabel.innerText = "Name";
+                dateLabel.innerText = "Role (e.g. Driver)";
+                link1Label.innerText = "Phone Number";
+                link2Label.innerText = "WhatsApp (Optional)";
+                driveBox.style.display = 'none';
+                document.getElementById('input-3').placeholder = "e.g. 919876543210";
+                document.getElementById('input-4').placeholder = "Same as phone if empty";
+            } else if(type === 'map') {
+                document.getElementById('modal-title').innerText = index > -1 ? "Edit Location" : "Add Location";
+                titleLabel.innerText = "Location Name";
+                dateLabel.innerText = "City / Area";
+                link1Label.innerText = "Google Maps Search Query or Link";
+                driveBox.style.display = 'none';
+                group4.style.display = 'none';
+                document.getElementById('input-3').placeholder = "e.g. 'Ella Rock' or 'https://goo.gl...'";
+            } else if(type === 'itinerary') {
+                document.getElementById('modal-title').innerText = index > -1 ? "Edit Plan" : "Add Plan";
+                titleLabel.innerText = "Title (e.g. Travel to Ella)";
+                dateLabel.innerText = "Date (YYYY-MM-DD)";
+                link1Label.innerText = "Location Name";
+                link2Label.innerText = "Details / Description";
+                driveBox.style.display = 'none';
+                document.getElementById('input-3').placeholder = "e.g. Ella Guest House";
+                document.getElementById('input-4').placeholder = "Details...";
+            }
+
+            // Fill Data if editing
+            if (index > -1) {
+                const data = loadData(type)[index];
+                document.getElementById('input-1').value = data.title || '';
+                
+                // Map handling
+                if(type === 'map') {
+                    document.getElementById('input-2').value = data.loc || '';
+                    document.getElementById('input-3').value = data.query || '';
+                } 
+                // Itinerary handling
+                else if (type === 'itinerary') {
+                    document.getElementById('input-2').value = data.date || '';
+                    document.getElementById('input-3').value = data.loc || '';
+                    document.getElementById('input-4').value = data.details || '';
+                } 
+                // Default docs
+                else {
+                    document.getElementById('input-2').value = data.date || '';
+                    document.getElementById('input-3').value = data.link1 || '';
+                    document.getElementById('input-4').value = data.link2 || '';
+                }
+            } else {
+                // Clear fields
+                document.getElementById('input-1').value = '';
+                document.getElementById('input-2').value = '';
+                document.getElementById('input-3').value = '';
+                document.getElementById('input-4').value = '';
+                if(type === 'itinerary') {
+                    document.getElementById('input-2').value = new Date().toISOString().split('T')[0];
+                }
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('universal-modal');
+            const content = document.getElementById('universal-modal-content');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 200);
+        }
+
+        function saveItem() {
+            const val1 = document.getElementById('input-1').value;
+            const val2 = document.getElementById('input-2').value;
+            const val3 = document.getElementById('input-3').value;
+            let val4 = document.getElementById('input-4').value;
+
+            if(!val1) { alert("Please enter a Title/Name"); return; }
+            
+            // Logic per type
+            let newItem = {};
+            if(currentType === 'map') {
+                newItem = { title: val1, loc: val2, query: val3 };
+            } else if(currentType === 'itinerary') {
+                newItem = { title: val1, date: val2, loc: val3, details: val4, icon: 'fa-calendar-day' }; // Default icon for new items
+            } else {
+                if(currentType === 'contact' && !val4) val4 = val3;
+                newItem = { title: val1, date: val2, link1: val3, link2: val4 };
+            }
+
+            const data = loadData(currentType);
+
+            if (currentEditIndex > -1) {
+                data[currentEditIndex] = newItem;
+            } else {
+                data.push(newItem);
+            }
+            
+            // For itinerary, sort by date
+            if(currentType === 'itinerary') {
+                data.sort((a, b) => new Date(a.date) - new Date(b.date));
+            }
+
+            saveData(currentType, data);
+            
+            // Re-render
+            if(currentType === 'contact') renderContacts();
+            else if(currentType === 'map') renderMaps();
+            else if(currentType === 'itinerary') renderItinerary();
+            else renderList(currentType);
+            
+            closeModal();
+        }
+
+        // Init
+        const inrInput = document.getElementById('inr-input');
+        const lkrOutput = document.getElementById('lkr-output');
+        inrInput.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            lkrOutput.innerText = isNaN(val) ? "0.00" : (val * 3.5).toFixed(2);
+        });
+        
+        // --- PWA Install Logic ---
+        let deferredPrompt;
+        const installCard = document.getElementById('install-prompt');
+        const iosHint = document.getElementById('ios-install-hint');
+
+        // 1. Handle Android/Desktop Chrome Install Prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI to notify the user they can add to home screen
+            installCard.classList.remove('hidden');
+        });
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                        installCard.classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // 2. Handle iOS Detection (Show hint since they don't have a prompt button)
+        function detectIOS() {
+            const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
+            // Check if already in standalone mode (installed)
+            const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
+            
+            if (isIos && !isInStandaloneMode) {
+                iosHint.classList.remove('hidden');
+            }
+        }
+        detectIOS();
+
+        switchTab('dashboard');
+        renderItinerary();
+        renderList('flight');
+        renderList('hotel');
+        renderList('visa');
+        renderMaps();
+        renderContacts();
+        renderTranslations();
+
+    </script>
+</body>
+</html>
