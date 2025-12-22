@@ -646,7 +646,7 @@
                 // FIXED: Use Package-Based Intent.
                 // This tells Android to launch the app with this Package ID directly.
                 // If not found, it executes the S.browser_fallback_url.
-                window.location.href = 'intent:#Intent;package=com.pickme.passenger;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.pickme.passenger;end';
+                window.location.href = 'intent:#Intent;scheme=pickme;package=com.pickme.passenger;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.pickme.passenger;end';
             } 
             else if (isIOS) {
                 // iOS Fallback method
@@ -1259,3 +1259,4 @@
     </script>
 </body>
 </html>
+
