@@ -684,8 +684,8 @@ async function fetchGeminiResponse(userPrompt, systemContext = "", imageBase64 =
                 if(!apiKey) return "Error: No API Key";
             }
             
-            // KEEP YOUR URL FIX HERE (Ensure it says 1.5-flash, not 2.5)
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            // Ensure there are NO spaces inside the quotes
+const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             
             let parts = [{ text: systemContext ? `${systemContext}\n\nUser: ${userPrompt}` : userPrompt }];
             if (imageBase64 && imageMime) parts.push({ inlineData: { mimeType: imageMime, data: imageBase64 } });
@@ -1266,3 +1266,4 @@ async function fetchGeminiResponse(userPrompt, systemContext = "", imageBase64 =
     </script>
 </body>
 </html>
+
