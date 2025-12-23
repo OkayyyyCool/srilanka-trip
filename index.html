@@ -680,7 +680,7 @@
 
 //begin        
 
-   async function fetchGeminiResponse(
+async function fetchGeminiResponse(
     userPrompt,
     systemContext = "",
     imageBase64 = null,
@@ -691,19 +691,27 @@
         if (!apiKey) return "Error: No API Key";
     }
 
-    // Lazy-load official Gemini SDK (browser-safe ESM)
-    if (!window.__geminiModel) {
+    // Lazy-load Gemini SDK once
+    if (!window.__gemini) {
         const { GoogleGenerativeAI } = await import(
             "https://esm.sh/@google/generative-ai"
         );
-
-        const genAI = new GoogleGenerativeAI(AIzaSyAxKcCeAA8yeV47polA0uaAE48dlORKrFg);
-        window.__geminiModel = genAI.getGenerativeModel({
-            model: "gemini-pro-vision"
-        });
+        window.__gemini = new GoogleGenerativeAI(AIzaSyAxKcCeAA8yeV47polA0uaAE48dlORKrFg);
     }
 
-    const parts = [{ text: userPrompt }];
+    // Select correct model
+    const modelName = imageBase64
+        ? "gemini-pro-vision"   // image + text
+        : "gemini-pro";         // text only
+
+    const model = window.__gemini.getGenerativeModel({ model: modelName });
+
+    // Merge system context safely (SDK does not support system role)
+    const finalPrompt = systemContext
+        ? `${systemContext}\n\nUser: ${userPrompt}`
+        : userPrompt;
+
+    const parts = [{ text: finalPrompt }];
 
     if (imageBase64 && imageMime) {
         parts.push({
@@ -715,25 +723,14 @@
     }
 
     try {
-        const result = await window.__geminiModel.generateContent({
-            contents: [
-                ...(systemContext
-                    ? [{
-                        role: "system",
-                        parts: [{ text: systemContext }]
-                    }]
-                    : []),
-                {
-                    role: "user",
-                    parts
-                }
-            ]
+        const result = await model.generateContent({
+            contents: [{ role: "user", parts }]
         });
 
         return result.response.text() || "No response from model.";
     } catch (err) {
         console.error("Gemini SDK error:", err);
-        return err.message || "Gemini request failed.";
+        return "AI error. Please try again.";
     }
 }
 
@@ -1296,6 +1293,7 @@
 </html>
 
 f
+
 
 
 
