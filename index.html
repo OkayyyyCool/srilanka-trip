@@ -186,7 +186,7 @@
                 <div class="space-y-3">
                     <!-- Phone Number -->
                     <div class="flex space-x-2">
-                        <input type="tel" id="sl-phone-input" placeholder="My Local Number" class="flex-1 bg-white border border-indigo-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-400 text-gray-700 font-medium" onchange="saveSLNumber(this.value)">
+                        <input type="tel" id="sl-phone-input" placeholder="My Local Number" class="flex-1 bg-white border border-indigo-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-400 text-gray-700 font-medium">
                         <button onclick="sharePhoneNumber()" class="bg-indigo-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md active:scale-95 transition">
                             <i class="fa-solid fa-share-nodes"></i>
                         </button>
@@ -564,16 +564,50 @@
         ];
 
         // --- Functions ---
-        // SL Number Persistence
-        const storedSLNumber = localStorage.getItem('sl_phone_number');
-        if(storedSLNumber) {
-            // Need to wait for DOM to load in some cases, but since script is at bottom it's fine
-            const input = document.getElementById('sl-phone-input');
-            if(input) input.value = storedSLNumber;
-        }
+        // SL Number Persistence & Formatting
+        const slPhoneInput = document.getElementById('sl-phone-input');
+        if (slPhoneInput) {
+            const stored = localStorage.getItem('sl_phone_number');
+            if (stored) slPhoneInput.value = stored;
 
-        function saveSLNumber(val) {
-            localStorage.setItem('sl_phone_number', val);
+            slPhoneInput.addEventListener('focus', function() {
+                if(!this.value) this.value = '+94 ';
+            });
+
+            slPhoneInput.addEventListener('input', function() {
+                // 1. Maintain Prefix
+                let val = this.value;
+                if (!val.startsWith('+94 ')) {
+                    // If prefix missing/damaged, strip non-digits and re-add prefix
+                    // This handles if user deletes the space or part of +94
+                    const rawDigits = val.replace(/\D/g, ''); 
+                    // If rawDigits starts with 94, remove it to avoid dupes (simple heuristic)
+                    const cleanDigits = rawDigits.startsWith('94') ? rawDigits.substring(2) : rawDigits;
+                    val = '+94 ' + cleanDigits;
+                }
+
+                // 2. Limit Length (Max 9 digits after prefix)
+                const prefix = '+94 ';
+                const digitsPart = val.substring(prefix.length).replace(/\D/g, ''); // Get just numbers
+                
+                if (digitsPart.length > 9) {
+                    val = prefix + digitsPart.substring(0, 9);
+                } else {
+                    val = prefix + digitsPart;
+                }
+                
+                this.value = val;
+                localStorage.setItem('sl_phone_number', this.value);
+            });
+            
+            // Extra safety: save on blur (loss of focus)
+            slPhoneInput.addEventListener('blur', function() {
+                localStorage.setItem('sl_phone_number', this.value);
+            });
+            // Extra safety: save on change
+             slPhoneInput.addEventListener('change', function() {
+                localStorage.setItem('sl_phone_number', this.value);
+            });
         }
 
         async function sharePhoneNumber() {
@@ -1208,6 +1242,7 @@
         renderMaps();
         renderContacts();
         renderTranslations();
+
     </script>
 </body>
 </html>
