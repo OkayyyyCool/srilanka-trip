@@ -696,7 +696,7 @@ async function fetchGeminiResponse(
         const { GoogleGenerativeAI } = await import(
             "https://esm.sh/@google/generative-ai"
         );
-        window.__gemini = new GoogleGenerativeAI(AIzaSyAxKcCeAA8yeV47polA0uaAE48dlORKrFg);
+        window.__gemini = new GoogleGenerativeAI(apikey);
     }
 
     // Select correct model
@@ -1291,4 +1291,5 @@ async function fetchGeminiResponse(
     </script>
 </body>
 </html>
+
 
