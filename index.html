@@ -368,7 +368,7 @@
                     <div>
                         <label class="text-xs text-gray-500 font-bold uppercase">Sri Lankan Rupee (LKR)</label>
                         <div id="lkr-output" class="text-3xl font-bold text-teal-700">350.00</div>
-                        <p class="text-xs text-gray-400 mt-1">*Approx rate: 1 INR = 3.5 LKR</p>
+                        <p class="text-xs text-gray-400 mt-1">*Approx rate: 1 INR = 3.44 LKR</p>
                     </div>
                 </div>
             </div>
@@ -1051,7 +1051,7 @@
         if (inrInput && lkrOutput) {
              inrInput.addEventListener('input', (e) => {
                 const val = parseFloat(e.target.value);
-                lkrOutput.innerText = isNaN(val) ? "0.00" : (val * 3.5).toFixed(2);
+                lkrOutput.innerText = isNaN(val) ? "0.00" : (val * 3.44).toFixed(2);
             });
         }
         
@@ -1121,3 +1121,4 @@
     </script>
 </body>
 </html>
+
