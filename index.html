@@ -157,32 +157,41 @@
 
             <!-- Quick Connect -->
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Quick Connect</h2>
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fa-solid fa-address-book text-gray-400"></i>
+                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Quick Connect</h2>
+                </div>
                 <div id="contacts-container" class="grid grid-cols-2 gap-4"></div>
             </div>
 
-            <!-- Documents Links -->
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Important Docs</h2>
+            <!-- Important Docs (Updated: Green Background, White Tabs) -->
+            <div class="bg-teal-50 rounded-2xl p-5 shadow-sm border border-teal-100">
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fa-solid fa-folder-open text-teal-600"></i>
+                    <h2 class="text-xs font-bold text-teal-600 uppercase tracking-wider">Important Docs</h2>
+                </div>
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="switchTab('flights')" class="bg-teal-50 border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-100 transition w-full text-left">
+                    <button onclick="switchTab('flights')" class="bg-white border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-50 transition w-full text-left shadow-sm">
                         <i class="fa-solid fa-ticket text-teal-600"></i><span class="text-sm font-medium text-teal-900">Flights</span>
                     </button>
-                    <button onclick="switchTab('hotels')" class="bg-teal-50 border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-100 transition w-full text-left">
+                    <button onclick="switchTab('hotels')" class="bg-white border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-50 transition w-full text-left shadow-sm">
                         <i class="fa-solid fa-hotel text-teal-600"></i><span class="text-sm font-medium text-teal-900">Hotels</span>
                     </button>
-                    <button onclick="switchTab('visa')" class="bg-teal-50 border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-100 transition w-full text-left">
+                    <button onclick="switchTab('visa')" class="bg-white border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-50 transition w-full text-left shadow-sm">
                         <i class="fa-solid fa-passport text-teal-600"></i><span class="text-sm font-medium text-teal-900">Visa & Other docs</span>
                     </button>
-                    <button onclick="switchTab('map')" class="bg-teal-50 border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-100 transition w-full text-left">
+                    <button onclick="switchTab('map')" class="bg-white border border-teal-100 p-3 rounded-xl flex items-center space-x-3 hover:bg-teal-50 transition w-full text-left shadow-sm">
                         <i class="fa-solid fa-map text-teal-600"></i><span class="text-sm font-medium text-teal-900">Travel</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Quick Share (New) -->
+            <!-- Quick Share (Updated: Added Icon) -->
             <div class="bg-indigo-50 rounded-2xl p-5 shadow-sm border border-indigo-100">
-                <h2 class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-4">Quick Share</h2>
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fa-solid fa-share-nodes text-indigo-500"></i>
+                    <h2 class="text-xs font-bold text-indigo-500 uppercase tracking-wider">Quick Share</h2>
+                </div>
                 <div class="space-y-3">
                     <!-- Phone Number -->
                     <div class="flex space-x-2">
@@ -1246,4 +1255,3 @@
     </script>
 </body>
 </html>
-
