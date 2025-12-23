@@ -681,6 +681,9 @@
         updateSriLankaTime();
         
         function playAudio(text) {
+            // Cancel any ongoing speech first to fix iOS overlapping
+            window.speechSynthesis.cancel();
+            
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'si-LK'; 
