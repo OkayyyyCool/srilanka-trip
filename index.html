@@ -619,27 +619,40 @@
             });
         }
 
-        async function sharePhoneNumber() {
-            const num = document.getElementById('sl-phone-input').value;
-            if(!num) return alert("Please enter a number first!");
+        async function fetchGeminiResponse(userPrompt, systemContext = "", imageBase64 = null, imageMime = null) {
+            if (!apiKey) {
+                apiKey = prompt("API Key Required:");
+                if(!apiKey) return "Error: No API Key";
+            }
             
-            const shareData = {
-                title: 'My Sri Lanka Number',
-                text: `Here is my local Sri Lanka number: ${num}`
-            };
+            // KEEP YOUR URL FIX HERE (Ensure it says 1.5-flash, not 2.5)
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            
+            let parts = [{ text: systemContext ? `${systemContext}\n\nUser: ${userPrompt}` : userPrompt }];
+            if (imageBase64 && imageMime) parts.push({ inlineData: { mimeType: imageMime, data: imageBase64 } });
 
             try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                } else {
-                    // Fallback
-                    prompt("Copy to clipboard:", shareData.text);
+                const response = await fetch(url, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ role: "user", parts: parts }] })
+                });
+                const data = await response.json();
+                
+                // --- NEW CODE: Check for API errors explicitly ---
+                if (data.error) {
+                    console.error("Gemini API Error:", data); // Also logs to browser console (F12)
+                    return `⚠️ API Error: ${data.error.message}`;
                 }
-            } catch (err) {
-                console.log('Error sharing:', err);
+                // -------------------------------------------------
+
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "⚠️ No response text. Check console for details.";
+            } catch (e) {
+                console.error(e);
+                return `⚠️ Network Error: ${e.message}`;
             }
         }
 
+        
         function shareLocation() {
             if (!navigator.geolocation) {
                 alert("Geolocation is not supported by this browser.");
@@ -1255,4 +1268,5 @@
     </script>
 </body>
 </html>
+
 
