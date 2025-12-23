@@ -506,7 +506,7 @@
         // --- Configuration ---
         let currentType = ''; 
         let currentEditIndex = -1;
-        let apiKey = "AIzaSyCG1batKAUa0wpuXEhC2wRQZ3RR6vDif5g"; 
+        let apiKey = "AIzaSyAxKcCeAA8yeV47polA0uaAE48dlORKrFg"; 
         let selectedImageBase64 = null;
         let selectedImageMime = null;
 
@@ -678,12 +678,12 @@
             });
         }
 
- async function fetchGeminiResponse(userPrompt, systemContext = "", imageBase64 = null, imageMime = null) {
+        async function fetchGeminiResponse(userPrompt, systemContext = "", imageBase64 = null, imageMime = null) {
             if (!apiKey) {
                 apiKey = prompt("API Key Required:");
                 if(!apiKey) return "Error: No API Key";
             }
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             let parts = [{ text: systemContext ? `${systemContext}\n\nUser: ${userPrompt}` : userPrompt }];
             if (imageBase64 && imageMime) parts.push({ inlineData: { mimeType: imageMime, data: imageBase64 } });
 
@@ -773,6 +773,7 @@
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+
         async function translateWithGemini() {
             const input = document.getElementById('translate-input').value;
             if (!input) return alert("Please type something!");
@@ -1255,4 +1256,4 @@
 </body>
 </html>
 
-
+f
