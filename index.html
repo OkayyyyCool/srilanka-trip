@@ -683,7 +683,7 @@
                 apiKey = prompt("API Key Required:");
                 if(!apiKey) return "Error: No API Key";
             }
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
             let parts = [{ text: systemContext ? `${systemContext}\n\nUser: ${userPrompt}` : userPrompt }];
             if (imageBase64 && imageMime) parts.push({ inlineData: { mimeType: imageMime, data: imageBase64 } });
 
@@ -1257,3 +1257,4 @@
 </html>
 
 f
+
