@@ -432,6 +432,20 @@
 
             <h3 class="font-bold text-lg mb-4 px-2">Common Phrases</h3>
             <div id="translate-container" class="grid gap-3"></div>
+
+            <!-- API Key Settings (New Section) -->
+            <div class="mt-8 bg-gray-800 text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 text-gray-700 text-9xl z-0 opacity-20"><i class="fa-solid fa-key"></i></div>
+                <h3 class="font-bold text-lg mb-2 relative z-10"><i class="fa-solid fa-key mr-2"></i>AI Settings</h3>
+                <p class="text-xs text-gray-400 mb-4 relative z-10">Enter your Gemini API Key to enable Chat & Translation features.</p>
+                <div class="relative z-10 space-y-3">
+                    <input type="password" id="api-key-input" placeholder="Paste API Key here" class="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-sm focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none text-white placeholder-gray-500">
+                    <button onclick="saveApiKey()" class="w-full bg-teal-600 text-white font-bold py-3 rounded-xl shadow hover:bg-teal-700 transition active:scale-95">
+                        Save API Key
+                    </button>
+                    <p id="api-key-status" class="text-xs text-center text-green-400 font-medium h-4"></p>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -506,7 +520,8 @@
         // --- Configuration ---
         let currentType = ''; 
         let currentEditIndex = -1;
-        let apiKey = "AIzaSyDO1tDDrIoshD1ulZBjh9zHO9WLQyAg1KM"; 
+        // Updated: Load from Local Storage or default to empty
+        let apiKey = localStorage.getItem('sl_gemini_api_key') || ""; 
         let selectedImageBase64 = null;
         let selectedImageMime = null;
 
@@ -573,6 +588,20 @@
         ];
 
         // --- Functions ---
+        // New Function: Save API Key
+        function saveApiKey() {
+            const input = document.getElementById('api-key-input');
+            const status = document.getElementById('api-key-status');
+            if (input.value.trim()) {
+                apiKey = input.value.trim();
+                localStorage.setItem('sl_gemini_api_key', apiKey);
+                status.innerText = "API Key Saved Successfully! ✅";
+                setTimeout(() => status.innerText = "", 3000);
+            } else {
+                alert("Please enter a valid key.");
+            }
+        }
+
         // SL Number Persistence & Formatting
         const slPhoneInput = document.getElementById('sl-phone-input');
         if (slPhoneInput) {
@@ -680,8 +709,15 @@
 
 async function fetchGeminiResponse(userPrompt, systemContext = "", imageBase64 = null, imageMime = null) {
             if (!apiKey) {
-                apiKey = prompt("API Key Required:");
-                if(!apiKey) return "Error: No API Key";
+                apiKey = prompt("API Key Required (or save it in Tools tab):");
+                if(apiKey) {
+                    localStorage.setItem('sl_gemini_api_key', apiKey);
+                    // Update input if on that screen
+                    const input = document.getElementById('api-key-input');
+                    if(input) input.value = apiKey;
+                } else {
+                    return "Error: No API Key. Please add it in the Tools tab.";
+                }
             }
             
             // Ensure there are NO spaces inside the quotes
@@ -807,7 +843,7 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
                 
                 document.getElementById('translate-result').classList.remove('hidden');
             } catch (e) {
-                if(confirm("AI error. Open Google Translate?")) window.open(`https://www.google.com/search?q=translate+${encodeURIComponent(input)}+to+sinhala`, '_blank');
+                if(confirm("AI error or No Key. Open Google Translate?")) window.open(`https://www.google.com/search?q=translate+${encodeURIComponent(input)}+to+sinhala`, '_blank');
             }
             btn.innerHTML = originalText;
             btn.disabled = false;
@@ -1251,6 +1287,12 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
             }
         }
         
+        // Initialize existing key in UI if present
+        const storedKey = localStorage.getItem('sl_gemini_api_key');
+        if (storedKey && document.getElementById('api-key-input')) {
+            document.getElementById('api-key-input').value = storedKey;
+        }
+
         checkInstallStatus();
         const storedTab = localStorage.getItem('activeTab') || 'dashboard';
         switchTab(storedTab);
@@ -1266,4 +1308,3 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
     </script>
 </body>
 </html>
-
