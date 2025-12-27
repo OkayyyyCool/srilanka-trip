@@ -88,9 +88,15 @@
         /* Animations */
         .fade-in { animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen pb-24">
+    <canvas id="confetti-canvas"></canvas>
 
     <!-- Header -->
     <header class="relative text-white pt-12 pb-6 px-6 rounded-b-[2rem] shadow-lg z-30 sticky top-0 overflow-hidden bg-cover bg-center" style="background-image: url('header.jpg');">
@@ -151,6 +157,46 @@
                             1. Tap <span class="font-bold text-blue-500"><i class="fa-solid fa-arrow-up-from-bracket"></i> Share</span> below.<br>
                             2. Scroll & tap <span class="font-bold text-gray-700"><i class="fa-regular fa-square-plus"></i> Add to Home Screen</span>.
                         </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Countdown Card (New) -->
+            <div id="countdown-card" class="rounded-2xl p-6 shadow-lg text-white mb-6 relative overflow-hidden transition-all duration-1000 bg-gradient-to-br from-teal-500 to-teal-800">
+                <!-- Background Decor -->
+                <i id="cd-bg-icon" class="fa-solid fa-calendar-days absolute -right-6 -bottom-6 text-9xl opacity-10"></i>
+                <div class="absolute inset-0 bg-black/10 z-0"></div>
+                
+                <!-- Content -->
+                <div class="relative z-10 flex flex-col items-center text-center">
+                    <div class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-3 border border-white/20 shadow-sm" id="cd-pill">
+                        Upcoming
+                    </div>
+                    <h2 class="text-2xl font-bold mb-1 drop-shadow-md">New Year 2026</h2>
+                    <p id="cd-location" class="text-xs text-white/90 mb-5 font-medium tracking-wide flex items-center">
+                        <i class="fa-solid fa-location-dot mr-1"></i> Sri Lanka
+                    </p>
+                    
+                    <div class="flex justify-center items-center space-x-3 w-full max-w-xs">
+                        <div class="flex-1 bg-black/20 rounded-xl p-2 backdrop-blur-sm border border-white/10">
+                            <span id="cd-days" class="block text-2xl font-bold leading-none">00</span>
+                            <span class="text-[8px] uppercase opacity-70">Days</span>
+                        </div>
+                        <div class="text-lg font-bold opacity-50">:</div>
+                        <div class="flex-1 bg-black/20 rounded-xl p-2 backdrop-blur-sm border border-white/10">
+                            <span id="cd-hours" class="block text-2xl font-bold leading-none">00</span>
+                            <span class="text-[8px] uppercase opacity-70">Hrs</span>
+                        </div>
+                        <div class="text-lg font-bold opacity-50">:</div>
+                        <div class="flex-1 bg-black/20 rounded-xl p-2 backdrop-blur-sm border border-white/10">
+                            <span id="cd-mins" class="block text-2xl font-bold leading-none">00</span>
+                            <span class="text-[8px] uppercase opacity-70">Mins</span>
+                        </div>
+                        <div class="text-lg font-bold opacity-50">:</div>
+                        <div class="flex-1 bg-black/20 rounded-xl p-2 backdrop-blur-sm border border-white/10">
+                            <span id="cd-secs" class="block text-2xl font-bold leading-none">00</span>
+                            <span class="text-[8px] uppercase opacity-70">Secs</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -520,10 +566,10 @@
         // --- Configuration ---
         let currentType = ''; 
         let currentEditIndex = -1;
-        // Updated: Load from Local Storage or default to empty
         let apiKey = localStorage.getItem('sl_gemini_api_key') || ""; 
         let selectedImageBase64 = null;
         let selectedImageMime = null;
+        let confettiInterval = null;
 
         // --- Data ---
         const defaultItinerary = [
@@ -540,6 +586,7 @@
             { date: "2026-01-03", title: "Home Sweet Home", loc: "Delhi", icon: "fa-house-chimney", details: "HYD to DEL." }
         ];
 
+        // ... (Rest of Default Data Arrays remain same) ...
         const defaultFlights = [
             { title: "Delhi to Hyderabad", date: "2025-12-24", link1: "https://drive.google.com/file/d/12XgJcZeCWtT0Joqf5PbVJeOX-a4L-l1j/view?usp=drive_link", link2: "" },
             { title: "Hyderabad to Colombo", date: "2025-12-25", link1: "https://drive.google.com/file/d/1ipk1moPSCL3FSxHaZ18et44Nkp2hmoUO/view?usp=sharing", link2: "" },
@@ -588,7 +635,171 @@
         ];
 
         // --- Functions ---
-        // New Function: Save API Key
+        // NEW YEAR COUNTDOWN LOGIC
+        function updateCountdown() {
+            // Target: Jan 1, 2026 00:00:00 Sri Lanka Time (Asia/Colombo is UTC+5:30)
+            const now = new Date();
+            // Create a target date object. We want midnight Jan 1, 2026.
+            const target = new Date("2026-01-01T00:00:00+05:30"); 
+            
+            // NOTE: For true strict timezone adherence in JS without libraries like moment-timezone,
+            // we calculate the difference between target millis and current millis.
+            // However, since the user might be IN Sri Lanka, local time usually suffices. 
+            // If we want to force Sri Lanka time regardless of where the user is, we do this:
+            
+            const diff = target - now;
+
+            if (diff <= 0) {
+                // Happy New Year!
+                document.getElementById('cd-days').innerText = "00";
+                document.getElementById('cd-hours').innerText = "00";
+                document.getElementById('cd-mins').innerText = "00";
+                document.getElementById('cd-secs').innerText = "00";
+                document.querySelector('#countdown-card h2').innerText = "Happy New Year! 🎉";
+                document.getElementById('cd-pill').innerText = "Celebration";
+                document.getElementById('cd-pill').classList.add('animate-pulse', 'bg-yellow-400', 'text-black');
+                
+                if (!confettiInterval) startConfetti();
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
+            document.getElementById('cd-hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('cd-mins').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('cd-secs').innerText = String(seconds).padStart(2, '0');
+            
+            updateTheme(now);
+        }
+
+        function updateTheme(nowDate) {
+            // Logic to change card appearance based on date/itinerary
+            const card = document.getElementById('countdown-card');
+            const locText = document.getElementById('cd-location');
+            const icon = document.getElementById('cd-bg-icon');
+            
+            // Format today as YYYY-MM-DD to match simple string comparison
+            // Using local time for theme switching is fine
+            const year = nowDate.getFullYear();
+            const month = String(nowDate.getMonth() + 1).padStart(2, '0');
+            const day = String(nowDate.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            // Theme Definitions
+            // Tailwind Gradients: 
+            // Nuwara Eliya (Green): from-emerald-600 to-green-900
+            // Adam's Peak (Sunrise): from-purple-600 to-orange-500
+            // Mirissa (Ocean): from-cyan-500 to-blue-800
+            // Kandy (Culture): from-amber-600 to-red-800
+            // Colombo/Travel (Default): from-teal-500 to-teal-800
+            
+            let themeClass = 'from-teal-500 to-teal-800';
+            let locationName = 'Sri Lanka';
+            let iconClass = 'fa-calendar-days';
+
+            if (todayStr === '2025-12-28') {
+                themeClass = 'from-emerald-600 to-green-900';
+                locationName = 'Nuwara Eliya • Hills';
+                iconClass = 'fa-leaf';
+            } else if (todayStr === '2025-12-29') {
+                themeClass = 'from-indigo-600 to-pink-600'; // Sunrise vibe
+                locationName = 'Adam\'s Peak • Hike';
+                iconClass = 'fa-mountain-sun';
+            } else if (todayStr === '2025-12-30' || todayStr === '2025-12-31') {
+                themeClass = 'from-cyan-500 to-blue-800';
+                locationName = 'Mirissa • Beach Party';
+                iconClass = 'fa-umbrella-beach';
+            } else if (todayStr === '2025-12-26') {
+                themeClass = 'from-stone-500 to-stone-800'; // Rock vibe
+                locationName = 'Sigiriya • Lion Rock';
+                iconClass = 'fa-archway';
+            } else if (todayStr === '2025-12-27') {
+                themeClass = 'from-amber-600 to-red-900'; 
+                locationName = 'Kandy • Temple';
+                iconClass = 'fa-vihara';
+            }
+
+            // Apply Theme safely
+            // Remove old gradient classes first (simple approach: reset classList then add defaults + new theme)
+            card.className = `rounded-2xl p-6 shadow-lg text-white mb-6 relative overflow-hidden transition-all duration-1000 bg-gradient-to-br ${themeClass}`;
+            locText.innerHTML = `<i class="fa-solid fa-location-dot mr-1"></i> ${locationName}`;
+            icon.className = `fa-solid ${iconClass} absolute -right-6 -bottom-6 text-9xl opacity-10`;
+        }
+
+        // CONFETTI LOGIC (Simple Canvas Implementation)
+        function startConfetti() {
+            if (confettiInterval) return;
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const pieces = [];
+            const numberOfPieces = 150;
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f'];
+
+            function newPiece() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: -20,
+                    rotation: Math.random() * 360,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    size: Math.random() * 10 + 5,
+                    speedY: Math.random() * 5 + 2,
+                    speedX: Math.random() * 4 - 2,
+                    rotationSpeed: Math.random() * 10 - 5
+                };
+            }
+
+            for (let i = 0; i < numberOfPieces; i++) {
+                pieces.push(newPiece());
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach((p) => {
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.rotation += p.rotationSpeed;
+
+                    if (p.y > canvas.height) {
+                        Object.assign(p, newPiece());
+                    }
+                });
+            }
+
+            confettiInterval = setInterval(draw, 20);
+            
+            // Stop after 30 seconds to save battery? Or let it run? Let's let it run for 1 min.
+            setTimeout(() => {
+                clearInterval(confettiInterval);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                confettiInterval = null;
+            }, 60000); 
+            
+            // Handle Resize
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        // Start Countdown Loop
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Run once immediately
+
+        // ... (Rest of existing functions: saveApiKey, slPhoneInput, sharePhoneNumber, etc.) ...
         function saveApiKey() {
             const input = document.getElementById('api-key-input');
             const status = document.getElementById('api-key-status');
@@ -602,7 +813,6 @@
             }
         }
 
-        // SL Number Persistence & Formatting
         const slPhoneInput = document.getElementById('sl-phone-input');
         if (slPhoneInput) {
             const stored = localStorage.getItem('sl_phone_number');
@@ -613,69 +823,39 @@
             });
 
             slPhoneInput.addEventListener('input', function() {
-                // 1. Maintain Prefix
                 let val = this.value;
                 if (!val.startsWith('+94 ')) {
-                    // If prefix missing/damaged, strip non-digits and re-add prefix
-                    // This handles if user deletes the space or part of +94
                     const rawDigits = val.replace(/\D/g, ''); 
-                    // If rawDigits starts with 94, remove it to avoid dupes (simple heuristic)
                     const cleanDigits = rawDigits.startsWith('94') ? rawDigits.substring(2) : rawDigits;
                     val = '+94 ' + cleanDigits;
                 }
-
-                // 2. Limit Length (Max 9 digits after prefix)
                 const prefix = '+94 ';
-                const digitsPart = val.substring(prefix.length).replace(/\D/g, ''); // Get just numbers
-                
+                const digitsPart = val.substring(prefix.length).replace(/\D/g, ''); 
                 if (digitsPart.length > 9) {
                     val = prefix + digitsPart.substring(0, 9);
                 } else {
                     val = prefix + digitsPart;
                 }
-                
                 this.value = val;
                 localStorage.setItem('sl_phone_number', this.value);
             });
-            
-            // Extra safety: save on blur (loss of focus)
-            slPhoneInput.addEventListener('blur', function() {
-                localStorage.setItem('sl_phone_number', this.value);
-            });
-            // Extra safety: save on change
-             slPhoneInput.addEventListener('change', function() {
-                localStorage.setItem('sl_phone_number', this.value);
-            });
+            slPhoneInput.addEventListener('blur', function() { localStorage.setItem('sl_phone_number', this.value); });
+            slPhoneInput.addEventListener('change', function() { localStorage.setItem('sl_phone_number', this.value); });
         }
 
         async function sharePhoneNumber() {
             const num = document.getElementById('sl-phone-input').value;
             if(!num) return alert("Please enter a number first!");
-            
-            const shareData = {
-                title: 'My Sri Lanka Number',
-                text: `Here is my local Sri Lanka number: ${num}`
-            };
-
+            const shareData = { title: 'My Sri Lanka Number', text: `Here is my local Sri Lanka number: ${num}` };
             try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                } else {
-                    // Fallback
-                    prompt("Copy to clipboard:", shareData.text);
-                }
-            } catch (err) {
-                console.log('Error sharing:', err);
-            }
+                if (navigator.share) await navigator.share(shareData);
+                else prompt("Copy to clipboard:", shareData.text);
+            } catch (err) { console.log('Error sharing:', err); }
         }
 
         function shareLocation() {
-            if (!navigator.geolocation) {
-                alert("Geolocation is not supported by this browser.");
-                return;
-            }
-            
-            const btn = event.currentTarget; // Get button to show loading state if needed
+            if (!navigator.geolocation) return alert("Geolocation is not supported by this browser.");
+            const btn = event.currentTarget; 
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Locating...';
 
@@ -683,68 +863,34 @@
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
                 const mapLink = `https://www.google.com/maps?q=${lat},${lng}`;
-                
-                const shareData = {
-                    title: 'My Location',
-                    text: `Hey, just checking in! Here is my current location for safety. 📍\n${mapLink}`
-                };
-
+                const shareData = { title: 'My Location', text: `Hey, just checking in! Here is my current location for safety. 📍\n${mapLink}` };
                 try {
-                    if (navigator.share) {
-                        await navigator.share(shareData);
-                    } else {
-                         // Fallback for desktop or non-supported browsers
-                         window.open(`https://wa.me/?text=${encodeURIComponent(shareData.text)}`, '_blank');
-                    }
-                } catch (err) {
-                    console.log('Error sharing:', err);
-                } finally {
-                     btn.innerHTML = originalText;
-                }
-            }, (error) => {
-                alert("Unable to retrieve your location. Please allow location access.");
-                btn.innerHTML = originalText;
-            });
+                    if (navigator.share) await navigator.share(shareData);
+                    else window.open(`https://wa.me/?text=${encodeURIComponent(shareData.text)}`, '_blank');
+                } catch (err) { console.log('Error sharing:', err); } finally { btn.innerHTML = originalText; }
+            }, (error) => { alert("Unable to retrieve your location. Please allow location access."); btn.innerHTML = originalText; });
         }
 
-async function fetchGeminiResponse(userPrompt, systemContext = "", imageBase64 = null, imageMime = null) {
+        async function fetchGeminiResponse(userPrompt, systemContext = "", imageBase64 = null, imageMime = null) {
             if (!apiKey) {
                 apiKey = prompt("API Key Required (or save it in Tools tab):");
                 if(apiKey) {
                     localStorage.setItem('sl_gemini_api_key', apiKey);
-                    // Update input if on that screen
                     const input = document.getElementById('api-key-input');
                     if(input) input.value = apiKey;
                 } else {
                     return "Error: No API Key. Please add it in the Tools tab.";
                 }
             }
-            
-            // Ensure there are NO spaces inside the quotes
-const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
-            
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
             let parts = [{ text: systemContext ? `${systemContext}\n\nUser: ${userPrompt}` : userPrompt }];
             if (imageBase64 && imageMime) parts.push({ inlineData: { mimeType: imageMime, data: imageBase64 } });
-
             try {
-                const response = await fetch(url, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ role: "user", parts: parts }] })
-                });
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ role: "user", parts: parts }] }) });
                 const data = await response.json();
-                
-                // --- NEW CODE: Check for API errors explicitly ---
-                if (data.error) {
-                    console.error("Gemini API Error:", data); // Also logs to browser console (F12)
-                    return `⚠️ API Error: ${data.error.message}`;
-                }
-                // -------------------------------------------------
-
+                if (data.error) { console.error("Gemini API Error:", data); return `⚠️ API Error: ${data.error.message}`; }
                 return data.candidates?.[0]?.content?.parts?.[0]?.text || "⚠️ No response text. Check console for details.";
-            } catch (e) {
-                console.error(e);
-                return `⚠️ Network Error: ${e.message}`;
-            }
+            } catch (e) { console.error(e); return `⚠️ Network Error: ${e.message}`; }
         }
         
         function openChat() { document.getElementById('chat-modal').classList.remove('hidden'); }
@@ -790,24 +936,18 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
             const input = document.getElementById('chat-input');
             const text = input.value.trim();
             if (!text && !selectedImageBase64) return;
-
             const suggestions = document.getElementById('chat-suggestions');
             if(suggestions) suggestions.style.display = 'none';
-
             const chatBox = document.getElementById('chat-messages');
             let messageHtml = text;
             if (selectedImageBase64) messageHtml += `<br><div class="flex items-center mt-1 space-x-1 opacity-70 italic text-[10px]"><i class="fa-solid fa-image"></i><span>Image attached</span></div>`;
-            
             chatBox.innerHTML += `<div class="chat-bubble chat-user">${messageHtml}</div>`;
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
-
             const typingId = 'typing-' + Date.now();
             chatBox.innerHTML += `<div id="${typingId}" class="chat-bubble chat-ai"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
-
             const context = `You are Kim Shin, a helpful travel buddy for Stuti's trip to Sri Lanka. Her itinerary: ${JSON.stringify(loadData('itinerary'))}. Flight details: ${JSON.stringify(loadData('flight'))}. Answer strictly about trip/food/culture. Keep concise (<50 words). Analyze attached images if any.`;
-
             try {
                 const response = await fetchGeminiResponse(text, context, selectedImageBase64, selectedImageMime);
                 document.getElementById(typingId).remove();
@@ -828,7 +968,6 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
             const originalText = btn.innerHTML;
             btn.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span>';
             btn.disabled = true;
-
             const prompt = `Translate to Sinhala (Sri Lanka). Output JSON: {"sinhala": "...", "pronunciation": "..."}. Text: "${input}"`;
             try {
                 const raw = await fetchGeminiResponse(prompt);
@@ -836,11 +975,8 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
                 const data = JSON.parse(jsonStr);
                 document.getElementById('t-sinhala').innerText = data.sinhala;
                 document.getElementById('t-phonetic').innerText = data.pronunciation;
-                
-                // --- ADDED: Bind Audio Button ---
                 const playBtn = document.getElementById('btn-play-translation');
                 playBtn.onclick = function() { playAudio(data.sinhala); };
-                
                 document.getElementById('translate-result').classList.remove('hidden');
             } catch (e) {
                 if(confirm("AI error or No Key. Open Google Translate?")) window.open(`https://www.google.com/search?q=translate+${encodeURIComponent(input)}+to+sinhala`, '_blank');
@@ -849,7 +985,6 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
             btn.disabled = false;
         }
 
-        // --- Common Logic ---
         function updateSriLankaTime() {
             const now = new Date();
             const timeEl = document.getElementById('sl-time');
@@ -861,9 +996,7 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
         updateSriLankaTime();
         
         function playAudio(text) {
-            // Cancel any ongoing speech first to fix iOS overlapping
             window.speechSynthesis.cancel();
-            
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'si-LK'; 
@@ -891,10 +1024,8 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
             document.querySelectorAll('.nav-btn i').forEach(el => el.classList.add('text-gray-400'));
             document.querySelectorAll('.nav-btn span').forEach(el => el.classList.remove('text-teal-600', 'text-gray-400'));
             document.querySelectorAll('.nav-btn span').forEach(el => el.classList.add('text-teal-600'));
-
             const activeSection = document.getElementById(`view-${tabName}`) || document.getElementById('view-dashboard');
             activeSection.classList.remove('hidden');
-            
             const btn = document.getElementById(tabName === 'plan' ? 'nav-plan' : tabName === 'tools' ? 'nav-tools' : 'nav-dashboard');
             if (btn) {
                 btn.querySelector('i').classList.remove('text-gray-400');
@@ -909,50 +1040,30 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
 
         function openPickMe() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            if (/android/i.test(ua)) {
-                window.location.href = 'market://details?id=com.pickme.passenger';
-            } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-                setTimeout(() => window.location.href = "https://apps.apple.com/lk/app/pickme-sri-lanka/id1006015699", 1500);
-                window.location.href = "pickme://";
-            } else {
-                window.open("https://pickme.lk/", "_blank");
-            }
+            if (/android/i.test(ua)) { window.location.href = 'market://details?id=com.pickme.passenger'; } 
+            else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) { setTimeout(() => window.location.href = "https://apps.apple.com/lk/app/pickme-sri-lanka/id1006015699", 1500); window.location.href = "pickme://"; } 
+            else { window.open("https://pickme.lk/", "_blank"); }
         }
 
         function openUberEats() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            if (/android/i.test(ua)) {
-                window.location.href = 'intent://#Intent;scheme=ubereats;package=com.ubercab.eats;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.ubercab.eats;end';
-            } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-                setTimeout(() => window.location.href = "https://apps.apple.com/us/app/uber-eats-food-delivery/id1058959277", 1500);
-                window.location.href = "ubereats://";
-            } else {
-                window.open("https://www.ubereats.com/", "_blank");
-            }
+            if (/android/i.test(ua)) { window.location.href = 'intent://#Intent;scheme=ubereats;package=com.ubercab.eats;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.ubercab.eats;end'; } 
+            else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) { setTimeout(() => window.location.href = "https://apps.apple.com/us/app/uber-eats-food-delivery/id1058959277", 1500); window.location.href = "ubereats://"; } 
+            else { window.open("https://www.ubereats.com/", "_blank"); }
         }
 
         function openLocalSend() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            if (/android/i.test(ua)) {
-                window.location.href = 'intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=org.localsend.localsend_app;S.browser_fallback_url=https://play.google.com/store/apps/details?id=org.localsend.localsend_app;end';
-            } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-                setTimeout(() => window.location.href = "https://apps.apple.com/us/app/localsend/id1661733229", 1500);
-                window.location.href = "localsend://";
-            } else {
-                window.open("https://localsend.org/", "_blank");
-            }
+            if (/android/i.test(ua)) { window.location.href = 'intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=org.localsend.localsend_app;S.browser_fallback_url=https://play.google.com/store/apps/details?id=org.localsend.localsend_app;end'; } 
+            else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) { setTimeout(() => window.location.href = "https://apps.apple.com/us/app/localsend/id1661733229", 1500); window.location.href = "localsend://"; } 
+            else { window.open("https://localsend.org/", "_blank"); }
         }
 
         function openNiyo() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            if (/android/i.test(ua)) {
-                window.location.href = 'intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=finance.global.travel.niyo;S.browser_fallback_url=https://play.google.com/store/apps/details?id=finance.global.travel.niyo;end';
-            } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-                setTimeout(() => window.location.href = "https://apps.apple.com/in/app/niyo-global-cards-for-travel/id1633946487", 1500);
-                window.location.href = "niyoglobal://";
-            } else {
-                window.open("https://niyo.com/", "_blank");
-            }
+            if (/android/i.test(ua)) { window.location.href = 'intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=finance.global.travel.niyo;S.browser_fallback_url=https://play.google.com/store/apps/details?id=finance.global.travel.niyo;end'; } 
+            else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) { setTimeout(() => window.location.href = "https://apps.apple.com/in/app/niyo-global-cards-for-travel/id1633946487", 1500); window.location.href = "niyoglobal://"; } 
+            else { window.open("https://niyo.com/", "_blank"); }
         }
 
         function loadData(type) {
@@ -1052,12 +1163,10 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
                 const color = item.color || colors[index % colors.length];
                 const initial = item.title.charAt(0);
                 const isMain = (item.title === 'Shreyans' || item.title === 'Samridhi');
-                
                 const avatar = item.image 
                     ? `<img src="${item.image}" class="w-10 h-10 rounded-full object-cover border border-${color}-200" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` 
                     : '';
                 const fallback = `<div class="w-10 h-10 bg-${color}-100 rounded-full flex items-center justify-center text-${color}-600 font-bold uppercase" style="${item.image ? 'display:none' : ''}">${initial}</div>`;
-                
                 container.innerHTML += `
                     <div class="bg-${color}-50 rounded-xl p-3 flex flex-col items-center justify-center space-y-2 border border-${color}-100 relative group">
                         <div class="absolute top-1 right-1 flex space-x-1">
@@ -1080,7 +1189,6 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
             const container = document.getElementById('maps-container');
             if(!container) return;
             container.innerHTML = '';
-            
             data.forEach((map, index) => {
                 const mapLink = map.query.startsWith('http') ? map.query : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(map.query)}`;
                 container.innerHTML += `
@@ -1101,7 +1209,6 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
             const container = document.getElementById('translate-container');
             if(!container) return;
             container.innerHTML = '';
-            
             translations.forEach(t => {
                 container.innerHTML += `
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex justify-between items-center">
@@ -1123,14 +1230,12 @@ const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flas
             const content = document.getElementById('universal-modal-content');
             const dateInput = document.getElementById('input-2');
             
-            // Layout adjustments
             document.getElementById('group-2').style.display = 'block';
             document.getElementById('group-4').style.display = 'block';
             document.getElementById('drive-info-box').style.display = 'block';
             
             if(['flight', 'hotel', 'itinerary'].includes(type)) dateInput.type = 'date'; else dateInput.type = 'text';
             
-            // Labels and Placeholders
             if(type === 'flight') {
                 document.getElementById('modal-title').innerText = index > -1 ? "Edit Flight" : "Add Flight";
                 document.getElementById('label-1').innerText = "Flight Name";
